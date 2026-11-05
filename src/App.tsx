@@ -72,7 +72,8 @@ const PLATFORMS: PlatformItem[] = [  {
   {
     id: 3,
     name: 'Mission Jeet',
-    title: 'Mission Jeet on MIND SPARK',
+    href: 'https://clone-video-lecture-website.vercel.app/',
+    title: 'Mission Jeet - Video lectures & batches',
     imgSrc: 'https://i.ibb.co/R4gdNrGJ/IMG-4136.png',
     imgAlt: 'Mission Jeet - MIND SPARK',
     objectFit: 'contain',
