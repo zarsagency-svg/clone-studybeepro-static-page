@@ -1,8 +1,10 @@
-# Study Bee Pro — Static Landing Page
+# MIND SPARK — Static Landing Page
 
-A single-page React + TypeScript landing page for the **Study Bee** education platform. It showcases the platform cards, an admin notification/inbox panel, and a like/message interaction, styled with Tailwind CSS v4 and a dark amber theme.
+A single-page React + TypeScript landing page for **MIND SPARK**, a free education platform. It showcases the platform cards, an admin notification/inbox panel, and a like/message interaction.
 
-Built with Vite and `vite-plugin-singlefile`, so `npm run build` produces a **self-contained `dist/index.html`** (JS and CSS inlined) that can be hosted on any static host or opened directly from disk.
+The site uses a **red & black** theme: a near-black `#0a0a0a` base, `#121212` / `#18181b` cards, and red accents (`#ef4444` → `#dc2626` → `#b91c1c`), with Syne headings over Inter body text.
+
+Built with Vite and `vite-plugin-singlefile`, so `npm run build` produces a **self-contained `dist/index.html`** (JS and CSS inlined) that can be hosted on any static host.
 
 ## Tech stack
 
@@ -14,6 +16,8 @@ Built with Vite and `vite-plugin-singlefile`, so `npm run build` produces a **se
 | Tailwind CSS (`@tailwindcss/vite`) | 4.1.17 |
 | lucide-react | 1.68.0 |
 | clsx + tailwind-merge | 2.1.1 / 3.4.0 |
+
+Fonts: **Inter** (body) and **Syne** (display) via Google Fonts.
 
 ## Getting started
 
@@ -36,12 +40,13 @@ npm run preview  # preview the production build locally
 
 ```
 .
-├── index.html                 # HTML shell, SEO/OG meta, fonts, favicon
+├── index.html                 # HTML shell, MIND SPARK SEO/OG meta, fonts, favicon
 ├── public/
+│   ├── mind-spark-logo.svg    # red spark brand mark (logo + favicon)
 │   └── noti.json              # notification count seed
 ├── src/
 │   ├── App.tsx                # main page + platform grid + messaging UI
-│   ├── index.css              # global styles, theme, animations
+│   ├── index.css              # red/black theme tokens, animations, card hover
 │   ├── main.tsx               # React entry point
 │   └── utils/cn.ts            # clsx + tailwind-merge class helper
 ├── vite.config.ts             # React, Tailwind, singlefile plugins + "@" alias
@@ -50,7 +55,7 @@ npm run preview  # preview the production build locally
 └── package-lock.json
 ```
 
-The `@` alias resolves to `src/` in both Vite and TypeScript.
+The `@` alias resolves to `src/` in both Vite and TypeScript. Theme colors live as CSS variables at the top of `src/index.css`, so the palette can be retuned in one place.
 
 ## Deployment
 
@@ -61,10 +66,10 @@ The build output is `dist/`. On Vercel / Netlify / Cloudflare Pages, use:
 - **Build command:** `npm run build`
 - **Output directory:** `dist`
 
-Because JS/CSS are inlined into `index.html`, the page also works when deployed to GitHub Pages or any plain static file server. `public/noti.json` is copied to `dist/` alongside it.
+Because JS/CSS are inlined into `index.html`, the page also works when deployed to GitHub Pages or any plain static file server. `public/mind-spark-logo.svg` and `public/noti.json` are copied to `dist/` alongside it.
 
 A GitHub Actions workflow (`.github/workflows/build.yml`) runs install, typecheck, and build on every push and pull request, and uploads `dist/` as a build artifact.
 
 ## Source
 
-Restored from the `clone-studybeepro-static-page.zip` archive. All original source files are preserved byte-for-byte; this README, `.gitignore`, and the CI workflow were added for the repository.
+Restored from the `clone-studybeepro-static-page.zip` archive, then rebranded to MIND SPARK with a red & black theme. This README, `.gitignore`, the CI workflow, and the SVG logo were added for the repository.

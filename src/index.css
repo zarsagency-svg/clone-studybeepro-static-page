@@ -1,20 +1,49 @@
 @import "tailwindcss";
 
+/* MIND SPARK — red & black theme tokens (matching the reference palette) */
 :root {
-  --bg-color: #030303;
+  color-scheme: dark;
+  --theme-bg: #0a0a0a;
+  --theme-surface: #121212;
+  --theme-surface-raised: #18181b;
+  --theme-red: #ef4444;
+  --theme-red-hover: #dc2626;
+  --theme-red-deep: #b91c1c;
+  --theme-text: #e5e5e5;
+  --theme-text-dim: #a1a1aa;
 }
 
 body {
-  font-family: 'Inter', sans-serif;
-  background-color: var(--bg-color);
-  color: #e4e4e7;
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: var(--theme-bg);
+  color: var(--theme-text);
   scroll-behavior: smooth;
   -webkit-tap-highlight-color: transparent;
   overflow-x: hidden;
 }
 
-.font-serif-premium {
-  font-family: 'Playfair Display', serif;
+.font-display {
+  font-family: 'Syne', 'Inter', sans-serif;
+  letter-spacing: -0.01em;
+}
+
+/* Dark scrollbar with a red hover state */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--theme-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #27272a;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--theme-red-deep);
 }
 
 /* Bouncy Spring Animation */
@@ -92,15 +121,17 @@ body {
   transform-origin: top center;
 }
 
-/* Card Hover */
+/* Card Hover — red glow on near-black surface */
 .platform-card {
   transition: all 0.3s ease;
 }
 
 .platform-card:hover {
   transform: translateY(-5px);
-  background-color: #121215;
-  border-color: rgba(251, 191, 36, 0.2);
+  background-color: var(--theme-surface-raised);
+  border-color: rgba(239, 68, 68, 0.45);
+  box-shadow: 0 10px 30px -10px rgba(239, 68, 68, 0.25),
+    0 0 18px rgba(239, 68, 68, 0.12);
 }
 
 .platform-card:active {
@@ -129,7 +160,7 @@ body {
   border: 0;
 }
 
-/* Counter Glow */
-.text-glow-amber {
-  text-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
+/* Red counter/heading glow */
+.text-glow-red {
+  text-shadow: 0 0 20px rgba(239, 68, 68, 0.55);
 }
