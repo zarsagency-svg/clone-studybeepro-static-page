@@ -18,6 +18,8 @@ There are **17 cards**, all in the same style (square logo + name, red border, i
 | Xhashik Anime | `https://animekai-stream-yvkn.arcada.app/` | Free anime streaming, 1080p SUB & DUB |
 | NoxGlass | `https://donotdistract.vercel.app/` | Distraction-free YouTube lecture player |
 
+The three live cards sit together at the very top of the grid (Next Toppers, Xhashik Anime, NoxGlass).
+
 The other **14 cards** are static, non-clickable "Coming Soon" placeholders rendered as plain `<div>` elements with no `href`, no click handler, no pointer cursor and no hover animation — clicking them does nothing. A card is live simply by having an `href`.
 
 Logos for the two new cards live in `public/platforms/`: `xhashik-anime.svg` (the site's real favicon) and `noxglass.svg` (custom red/black icon — that site ships no logo).
