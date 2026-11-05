@@ -8,9 +8,19 @@ Built with Vite and `vite-plugin-singlefile`, so `npm run build` produces a **se
 
 ## Platform cards
 
-- **Next Toppers** is the only live card. Clicking it opens `https://xhashikstudy-nt.vercel.app/`.
-- Every other card is a **static, non-clickable "Coming Soon" placeholder**. They are rendered as plain `<div>` elements with no `href`, no click handler, no pointer cursor and no hover animation — clicking them does nothing.
-- Platform names, images and order are otherwise unchanged.
+There are **17 cards**, all in the same style (square logo + name, red border, identical hover).
+
+**Live cards (clickable):**
+
+| Card | Link | What it is |
+| --- | --- | --- |
+| Next Toppers | `https://xhashikstudy-nt.vercel.app/` | Premium batches & classes |
+| Xhashik Anime | `https://animekai-stream-yvkn.arcada.app/` | Free anime streaming, 1080p SUB & DUB |
+| NoxGlass | `https://donotdistract.vercel.app/` | Distraction-free YouTube lecture player |
+
+The other **14 cards** are static, non-clickable "Coming Soon" placeholders rendered as plain `<div>` elements with no `href`, no click handler, no pointer cursor and no hover animation — clicking them does nothing. A card is live simply by having an `href`.
+
+Logos for the two new cards live in `public/platforms/`: `xhashik-anime.svg` (the site's real favicon) and `noxglass.svg` (custom red/black icon — that site ships no logo).
 
 ## Live Telegram subscriber count
 

@@ -177,6 +177,26 @@ const PLATFORMS: PlatformItem[] = [
     overflowHidden: true,
     delayMs: 1250,
   },
+  {
+    id: 16,
+    name: 'Xhashik Anime',
+    href: 'https://animekai-stream-yvkn.arcada.app/',
+    title: 'Xhashik Anime - Free anime streaming in 1080p, SUB & DUB',
+    imgSrc: '/platforms/xhashik-anime.svg',
+    imgAlt: 'Xhashik Anime - free anime streaming',
+    objectFit: 'contain',
+    delayMs: 1300,
+  },
+  {
+    id: 17,
+    name: 'NoxGlass',
+    href: 'https://donotdistract.vercel.app/',
+    title: 'NoxGlass - Distraction-free YouTube lecture player for focused study',
+    imgSrc: '/platforms/noxglass.svg',
+    imgAlt: 'NoxGlass - distraction-free lecture player',
+    objectFit: 'contain',
+    delayMs: 1350,
+  },
 ];
 
 // Bundled default so the inbox shows the notification even if the JSON fetch fails.
