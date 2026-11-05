@@ -191,7 +191,7 @@ const FALLBACK_MESSAGES: AdminMessage[] = [
 
 export function App() {
   const [unreadCount, setUnreadCount] = useState<number>(1);
-  const [subscribersCount, setSubscribersCount] = useState<number | null>(75996);
+  const [subscribersCount, setSubscribersCount] = useState<number | null>(null);
   const [isInboxMounted, setIsInboxMounted] = useState(false);
   const [isInboxOpen, setIsInboxOpen] = useState(false);
   const [messagesLoading, setMessagesLoading] = useState(false);
@@ -230,20 +230,21 @@ export function App() {
     checkNotifications();
   }, []);
 
-  // Fetch live Telegram subscriber count with a static fallback
+  // Fetch the real MIND SPARK Telegram subscriber count from our own endpoint.
+  // Kept server-side: Telegram blocks browser requests to t.me (CORS), and any
+  // bot token must never be shipped to the client.
   useEffect(() => {
     async function fetchLiveSubscribers() {
       try {
-        const res = await fetch('https://studybeepro.in/api/info');
+        const res = await fetch('/api/subscribers');
         if (res.ok) {
           const data = await res.json();
-          if (data.success && data.subscribers) {
-            setSubscribersCount(parseInt(data.subscribers, 10));
-            return;
+          if (Number.isFinite(data.count)) {
+            setSubscribersCount(data.count as number);
           }
         }
       } catch {
-        // Fallback to the last known snapshot (75,996)
+        // Static hosting without /api: show the neutral fallback below.
       }
     }
     fetchLiveSubscribers();
@@ -573,7 +574,7 @@ export function App() {
           style={{ animationDelay: '350ms' }}
         >
           <a
-            href="https://t.me/+oML37V1bL-40ZDNl"
+            href="https://t.me/zarsstudy"
             target="_blank"
             rel="noopener noreferrer"
             className="relative group block p-[1px] rounded-[1.25rem] bg-gradient-to-b from-red-400/40 to-transparent hover:from-red-500/70 hover:to-red-700/10 transition-all duration-300 shadow-[0_0_20px_rgba(239,68,68,0.12)] hover:shadow-[0_0_30px_rgba(239,68,68,0.35)] hover:-translate-y-1"
@@ -603,7 +604,7 @@ export function App() {
                           <span className="sm:hidden">Joined</span>
                         </>
                       ) : (
-                        'Fetching members...'
+                        'Join the community'
                       )}
                     </span>
                   </div>

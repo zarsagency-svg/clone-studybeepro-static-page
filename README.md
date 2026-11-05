@@ -12,6 +12,17 @@ Built with Vite and `vite-plugin-singlefile`, so `npm run build` produces a **se
 - Every other card is a **static, non-clickable "Coming Soon" placeholder**. They are rendered as plain `<div>` elements with no `href`, no click handler, no pointer cursor and no hover animation — clicking them does nothing.
 - Platform names, images and order are otherwise unchanged.
 
+## Live Telegram subscriber count
+
+The Telegram banner links to **`https://t.me/zarsstudy`** and shows the channel's **real** member count, fetched from `GET /api/subscribers`.
+
+`api/subscribers.js` is a small Node serverless function (auto-deployed from the `api/` folder on Vercel). It uses two sources:
+
+1. **Official Bot API** `getChatMemberCount` — used when `TELEGRAM_BOT_TOKEN` is set. Create a bot with [@BotFather](https://t.me/BotFather), add it to the channel, then set `TELEGRAM_BOT_TOKEN` in your Vercel project's environment variables (see `.env.example`). The token stays server-side and is never sent to the browser.
+2. **Public channel preview page** — no credentials needed. Telegram renders `tgme_page_extra` (e.g. `10 subscribers`) at `https://t.me/zarsstudy`; the function fetches and parses it server-side because browsers cannot due to CORS.
+
+Responses are cached for 5 minutes. On a purely static host with no `/api` route (GitHub Pages, plain file server, local `python -m http.server`), the request simply fails and the banner shows a neutral "Join the community" label — it never displays a fabricated number.
+
 ## Tech stack
 
 | Part | Version |
@@ -47,6 +58,9 @@ npm run preview  # preview the production build locally
 ```
 .
 ├── index.html                 # HTML shell, MIND SPARK SEO/OG meta, fonts, favicon
+├── api/
+│   └── subscribers.js         # serverless endpoint: real @zarsstudy member count
+├── .env.example               # optional TELEGRAM_BOT_TOKEN setup notes
 ├── public/
 │   ├── mind-spark-logo.jpeg   # supplied white spark logo (header + favicon)
 │   └── noti.json              # notification count seed
