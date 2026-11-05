@@ -72,8 +72,8 @@ const PLATFORMS: PlatformItem[] = [  {
   {
     id: 3,
     name: 'Mission Jeet',
-    href: 'https://clone-video-lecture-website.vercel.app/',
-    title: 'Mission Jeet - Video lectures & batches',
+    href: 'https://vibrantacademy-five.vercel.app/',
+    title: 'Mission Jeet - JEE prep batches & video lectures',
     imgSrc: 'https://i.ibb.co/R4gdNrGJ/IMG-4136.png',
     imgAlt: 'Mission Jeet - MIND SPARK',
     objectFit: 'contain',
@@ -170,7 +170,8 @@ const PLATFORMS: PlatformItem[] = [  {
   {
     id: 13,
     name: 'Vibrant Academy',
-    title: 'Vibrant Academy in MIND SPARK Aura',
+    href: 'https://vibrantacademy-five.vercel.app/',
+    title: 'Vibrant Academy - JEE prep batches & video lectures',
     imgSrc: 'https://i.ibb.co/LdRFR4WG/IMG-4218.png',
     imgAlt: 'Vibrant Academy - MIND SPARK',
     objectFit: 'cover',
