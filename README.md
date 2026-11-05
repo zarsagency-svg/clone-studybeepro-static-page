@@ -18,10 +18,15 @@ The Telegram banner links to **`https://t.me/zarsstudy`** and shows the channel'
 
 `api/subscribers.js` is a small Node serverless function (auto-deployed from the `api/` folder on Vercel). It uses two sources:
 
-1. **Official Bot API** `getChatMemberCount` — used when `TELEGRAM_BOT_TOKEN` is set. Create a bot with [@BotFather](https://t.me/BotFather), add it to the channel, then set `TELEGRAM_BOT_TOKEN` in your Vercel project's environment variables (see `.env.example`). The token stays server-side and is never sent to the browser.
-2. **Public channel preview page** — no credentials needed. Telegram renders `tgme_page_extra` (e.g. `10 subscribers`) at `https://t.me/zarsstudy`; the function fetches and parses it server-side because browsers cannot due to CORS.
+1. **Official Bot API** `getChatMemberCount` — **active in production**. A bot created with [@BotFather](https://t.me/BotFather) is an administrator of `@zarsstudy`, and its token is stored as the `TELEGRAM_BOT_TOKEN` environment variable in Vercel (type: sensitive, all environments). The token stays server-side and is never sent to the browser or committed to this repo.
+2. **Public channel preview page** — automatic fallback if the token is missing or the Bot API fails. Telegram renders `tgme_page_extra` (e.g. `10 subscribers`) at `https://t.me/zarsstudy`; the function fetches and parses it server-side because browsers cannot due to CORS.
 
-Responses are cached for 5 minutes. On a purely static host with no `/api` route (GitHub Pages, plain file server, local `python -m http.server`), the request simply fails and the banner shows a neutral "Join the community" label — it never displays a fabricated number.
+Both upstream calls have an 8-second timeout, and responses are cached for 5 minutes. On a purely static host with no `/api` route (GitHub Pages, plain file server), the request simply fails and the banner shows a neutral "Join the community" label — it never displays a fabricated number.
+
+Production deployments (both auto-deploy from `main`):
+
+- `https://mindspark-two-xi.vercel.app/`
+- `https://mindspark-all.vercel.app/`
 
 ## Tech stack
 

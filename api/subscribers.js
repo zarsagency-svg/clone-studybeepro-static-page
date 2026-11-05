@@ -12,6 +12,7 @@
 const CHANNEL = 'zarsstudy';
 const PREVIEW_URL = `https://t.me/${CHANNEL}`;
 const USER_AGENT = 'Mozilla/5.0 (compatible; MindSparkSubscriberCount/1.0)';
+const TIMEOUT_MS = 8000;
 
 function send(res, status, payload) {
   res.statusCode = status;
@@ -27,7 +28,7 @@ function send(res, status, payload) {
 
 async function fromBotApi(token) {
   const url = `https://api.telegram.org/bot${token}/getChatMemberCount?chat_id=@${CHANNEL}`;
-  const response = await fetch(url);
+  const response = await fetch(url, { signal: AbortSignal.timeout(TIMEOUT_MS) });
   const data = await response.json();
   return data && data.ok && Number.isFinite(data.result) ? data.result : null;
 }
@@ -35,6 +36,7 @@ async function fromBotApi(token) {
 async function fromPublicPreview() {
   const response = await fetch(PREVIEW_URL, {
     headers: { 'User-Agent': USER_AGENT },
+    signal: AbortSignal.timeout(TIMEOUT_MS),
   });
   if (!response.ok) return null;
 
