@@ -179,13 +179,14 @@ const PLATFORMS: PlatformItem[] = [
   },
 ];
 
-const FALLBACK_MESSAGES: AdminMessage[] = [
+// Bundled default so the inbox shows the notification even if the JSON fetch fails.
+const DEFAULT_MESSAGES: AdminMessage[] = [
   {
-    id: '0VKP1ayzTJyARgKRrkls',
-    title: 'Kesa hai mere bacha',
-    text: 'padhai achi chal rhi hai nah baby 💋🤭',
-    createdAt: 1786880487809,
-    likes: 12310,
+    id: 'welcome-mr-sad',
+    title: 'A message from Mr Sad, Admin',
+    text: 'Hello everyone, I am Mr Sad, the administrator of MIND SPARK. I hope you are all doing well. It is a pleasure to have you here — I will be sharing important updates and announcements through this channel. If you need any assistance, please feel free to reach out.',
+    createdAt: 1793886497834,
+    likes: 0,
   },
 ];
 
@@ -196,7 +197,7 @@ export function App() {
   const [isInboxOpen, setIsInboxOpen] = useState(false);
   const [messagesLoading, setMessagesLoading] = useState(false);
   const [hasLoadedMessages, setHasLoadedMessages] = useState(false);
-  const [messages, setMessages] = useState<AdminMessage[]>(FALLBACK_MESSAGES);
+  const [messages, setMessages] = useState<AdminMessage[]>(DEFAULT_MESSAGES);
   const [likedIds, setLikedIds] = useState<Record<string, boolean>>(() => {
     try {
       const initial: Record<string, boolean> = {};
@@ -250,40 +251,28 @@ export function App() {
     fetchLiveSubscribers();
   }, []);
 
-  // Fetch live adminMessages from Firestore REST API when inbox opens
-  const loadFirestoreMessages = async () => {
+  // Load the admin notifications published with this site
+  const loadAdminMessages = async () => {
     if (hasLoadedMessages) return;
     setMessagesLoading(true);
     try {
-      const res = await fetch(
-        'https://firestore.googleapis.com/v1/projects/omni-xx/databases/(default)/documents/adminMessages'
-      );
+      const res = await fetch('adminMessages.json?v=' + new Date().getTime());
       if (res.ok) {
         const data = await res.json();
-        if (Array.isArray(data.documents) && data.documents.length > 0) {
-          const parsed: AdminMessage[] = data.documents.map((docSnap: any) => {
-            const parts = String(docSnap.name || '').split('/');
-            const id = parts[parts.length - 1] || 'msg';
-            const fields = docSnap.fields || {};
-            const title = fields.title?.stringValue || '';
-            const text =
-              fields.message?.stringValue || fields.text?.stringValue || '';
-            const createdAt = Number(
-              fields.createdAt?.integerValue ||
-                fields.createdAt?.stringValue ||
-                Date.now()
-            );
-            const likes = Number(
-              fields.likes?.integerValue || fields.likes?.doubleValue || 0
-            );
-            return { id, title, text, createdAt, likes };
-          });
-          parsed.sort((a, b) => b.createdAt - a.createdAt);
-          setMessages(parsed);
-        }
+        const parsed: AdminMessage[] = (Array.isArray(data) ? data : []).map(
+          (item: AdminMessage) => ({
+            id: String(item.id),
+            title: item.title || '',
+            text: String(item.text || ''),
+            createdAt: Number(item.createdAt) || 0,
+            likes: Number(item.likes) || 0,
+          })
+        );
+        parsed.sort((a, b) => b.createdAt - a.createdAt);
+        setMessages(parsed);
       }
     } catch {
-      // Keep fallback messages
+      // Keep the bundled default notification
     } finally {
       setMessagesLoading(false);
       setHasLoadedMessages(true);
@@ -292,7 +281,7 @@ export function App() {
 
   const toggleInbox = () => {
     if (!isInboxMounted) {
-      loadFirestoreMessages();
+      loadAdminMessages();
       setIsInboxMounted(true);
       setUnreadCount(0);
       setTimeout(() => {
@@ -461,13 +450,11 @@ export function App() {
               {messagesLoading ? (
                 <div id="loading-indicator" className="flex flex-col gap-4">
                   <div className="w-full h-24 bg-zinc-800/50 rounded-xl animate-pulse" />
-                  <div className="w-full h-24 bg-zinc-800/50 rounded-xl animate-pulse" />
-                  <div className="w-full h-24 bg-zinc-800/50 rounded-xl animate-pulse" />
                 </div>
               ) : messages.length === 0 ? (
                 <div className="text-center py-10 text-zinc-500">
                   <Inbox className="w-10 h-10 mx-auto mb-3 opacity-50" />
-                  <p className="text-sm">No new messages from MIND SPARK Admin</p>
+                  <p className="text-sm">No new messages from Mr Sad</p>
                 </div>
               ) : (
                 messages.map((msg) => {
@@ -481,12 +468,12 @@ export function App() {
                         <div className="w-6 h-6 rounded-full border border-red-400/30 overflow-hidden shrink-0 bg-zinc-950">
                           <img
                             src={MIND_SPARK_LOGO}
-                            alt="MIND SPARK Admin Profile"
+                            alt="Mr Sad - Admin Profile"
                             className="w-full h-full object-cover"
                           />
                         </div>
                         <span className="text-red-400 font-semibold text-xs tracking-wider uppercase">
-                          MIND SPARK Admin
+                          Mr Sad · Admin
                         </span>
                         <span className="text-zinc-600 text-[10px] ml-auto">
                           {formatMessageDate(msg.createdAt)}

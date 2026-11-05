@@ -28,6 +28,16 @@ Production deployments (both auto-deploy from `main`):
 - `https://mindspark-two-xi.vercel.app/`
 - `https://mindspark-all.vercel.app/`
 
+## Notifications
+
+The bell in the top-right opens the admin inbox. Notifications are **owned by this repo** — there is no external Firestore or third-party message API anymore:
+
+- `public/adminMessages.json` — the array of messages. Edit this file and redeploy to publish, change or remove a notification. Each entry has `id`, `title`, `text`, `createdAt` (epoch ms) and `likes`.
+- `public/noti.json` — the unread badge `count` (currently `1`).
+- `src/App.tsx` holds a bundled copy of the default message so the inbox still works offline or if the JSON fetch fails.
+
+One notification is currently published, from **Mr Sad · Admin**. Opening the inbox clears the unread badge.
+
 ## Tech stack
 
 | Part | Version |
@@ -68,7 +78,8 @@ npm run preview  # preview the production build locally
 ├── .env.example               # optional TELEGRAM_BOT_TOKEN setup notes
 ├── public/
 │   ├── mind-spark-logo.jpeg   # supplied white spark logo (header + favicon)
-│   └── noti.json              # notification count seed
+│   ├── adminMessages.json     # published admin notifications
+│   └── noti.json              # unread badge count
 ├── src/
 │   ├── App.tsx                # main page + platform grid + messaging UI
 │   ├── index.css              # red/black theme tokens, animations, card hover
