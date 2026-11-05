@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import {
-  Clapperboard,
   Bell,
   X,
   Send,
@@ -12,7 +11,7 @@ import {
 interface PlatformItem {
   id: number;
   name: string;
-  href: string;
+  href?: string;
   title: string;
   imgSrc: string;
   imgAlt: string;
@@ -29,23 +28,22 @@ interface AdminMessage {
   likes: number;
 }
 
-const MIND_SPARK_LOGO = '/mind-spark-logo.svg';
+const MIND_SPARK_LOGO = '/mind-spark-logo.jpeg';
 
 const PLATFORMS: PlatformItem[] = [
   {
     id: 1,
-    name: 'Next Topper',
-    href: 'https://nt.studybeepro.site',
-    title: 'MIND SPARK Next Topper Platform',
+    name: 'Next Toppers',
+    href: 'https://xhashikstudy-nt.vercel.app/',
+    title: 'Next Toppers - MIND SPARK',
     imgSrc: 'https://i.ibb.co/Lzkbgnhz/IMG-4138.png',
-    imgAlt: 'MIND SPARK Next Topper Logo',
+    imgAlt: 'Next Toppers Logo',
     objectFit: 'contain',
     delayMs: 500,
   },
   {
     id: 2,
     name: 'Vidyagram',
-    href: 'https://studybeepro.site/vidyagram',
     title: 'Vidyagram on MIND SPARK Ecosystem',
     imgSrc: 'https://i.ibb.co/jkHpx8mY/IMG-5932.png',
     imgAlt: 'Vidyagram Logo',
@@ -56,7 +54,6 @@ const PLATFORMS: PlatformItem[] = [
   {
     id: 3,
     name: 'Mission Jeet',
-    href: 'https://studybeepro.site/mj',
     title: 'Mission Jeet on MIND SPARK',
     imgSrc: 'https://i.ibb.co/R4gdNrGJ/IMG-4136.png',
     imgAlt: 'Mission Jeet - MIND SPARK',
@@ -66,7 +63,6 @@ const PLATFORMS: PlatformItem[] = [
   {
     id: 4,
     name: 'S & F',
-    href: 'https://studybeepro.site/sf',
     title: 'S & F on MIND SPARK',
     imgSrc: 'https://i.ibb.co/Hf3Q02xR/IMG-5991.jpg',
     imgAlt: 'S & F Logo',
@@ -77,7 +73,6 @@ const PLATFORMS: PlatformItem[] = [
   {
     id: 5,
     name: 'Yes Officer',
-    href: 'https://studybeepro.site/yesoff',
     title: 'Yes Officer on MIND SPARK',
     imgSrc: 'https://i.ibb.co/8gVcx0RF/IMG-5939.webp',
     imgAlt: 'Yes Officer Logo',
@@ -88,7 +83,6 @@ const PLATFORMS: PlatformItem[] = [
   {
     id: 6,
     name: 'Bee Books',
-    href: 'https://studybeepro.site/bee-book',
     title: 'Bee Books by MIND SPARK',
     imgSrc: 'https://i.ibb.co/S4NNmf24/IMG-4274.png',
     imgAlt: 'Bee Books - MIND SPARK Edu',
@@ -99,7 +93,6 @@ const PLATFORMS: PlatformItem[] = [
   {
     id: 7,
     name: 'Futurekul',
-    href: 'https://studybeepro.site/futurekul/',
     title: 'Futurekul available on MIND SPARK',
     imgSrc: 'https://i.ibb.co/676BfqX6/IMG-4571.jpg',
     imgAlt: 'Futurekul - MIND SPARK',
@@ -110,7 +103,6 @@ const PLATFORMS: PlatformItem[] = [
   {
     id: 8,
     name: 'Master Sahab',
-    href: 'https://studybeepro.site/mastersahab',
     title: 'Master Sahab on MIND SPARK Ecosystem',
     imgSrc: 'https://i.ibb.co/JRNh3xd3/IMG-4611.webp',
     imgAlt: 'Master Sahab - MIND SPARK Aura',
@@ -121,7 +113,6 @@ const PLATFORMS: PlatformItem[] = [
   {
     id: 9,
     name: 'UNC Offline',
-    href: 'https://studybeepro.site/of-unc',
     title: 'UNC Offline via MIND SPARK Mod',
     imgSrc: MIND_SPARK_LOGO,
     imgAlt: 'UNC Offline - MIND SPARK Mod',
@@ -131,7 +122,6 @@ const PLATFORMS: PlatformItem[] = [
   {
     id: 10,
     name: 'UNC',
-    href: 'https://unc-bee.pages.dev/',
     title: 'UNC available on MIND SPARK',
     imgSrc: MIND_SPARK_LOGO,
     imgAlt: 'UNC - MIND SPARK',
@@ -141,7 +131,6 @@ const PLATFORMS: PlatformItem[] = [
   {
     id: 11,
     name: 'Rojgar W/ Ankit',
-    href: 'https://studybeepro.site/rwax',
     title: 'Rojgar With Ankit on MIND SPARK',
     imgSrc: 'https://i.ibb.co/rPSSc1D/IMG-4132.png',
     imgAlt: 'Rojgar With Ankit - MIND SPARK Platform',
@@ -152,7 +141,6 @@ const PLATFORMS: PlatformItem[] = [
   {
     id: 12,
     name: 'Selection Bee',
-    href: 'https://studybeepro.site/selectionbee',
     title: 'Selection Bee by MIND SPARK',
     imgSrc: 'https://i.ibb.co/F4yHhxyF/IMG-4135.png',
     imgAlt: 'Selection Bee - MIND SPARK Edu',
@@ -163,7 +151,6 @@ const PLATFORMS: PlatformItem[] = [
   {
     id: 13,
     name: 'Vibrant Academy',
-    href: 'https://studybeepro.site/vibrante',
     title: 'Vibrant Academy in MIND SPARK Aura',
     imgSrc: 'https://i.ibb.co/LdRFR4WG/IMG-4218.png',
     imgAlt: 'Vibrant Academy - MIND SPARK',
@@ -174,7 +161,6 @@ const PLATFORMS: PlatformItem[] = [
   {
     id: 14,
     name: 'Physics Wallah',
-    href: 'https://physicswallah.studybeepro.in',
     title: 'Physics Wallah on MIND SPARK Platform',
     imgSrc: 'https://i.ibb.co/h1YdY795/IMG-4134.png',
     imgAlt: 'Physics Wallah - MIND SPARK Mod',
@@ -184,7 +170,6 @@ const PLATFORMS: PlatformItem[] = [
   {
     id: 15,
     name: 'Sachin Academy',
-    href: 'https://studybeepro.site/sachinacademy',
     title: 'Sachin Academy on MIND SPARK Platform',
     imgSrc: 'https://i.ibb.co/bj3D47PC/IMG-5822.jpg',
     imgAlt: 'Sachin Academy - MIND SPARK',
@@ -387,7 +372,7 @@ export function App() {
         </p>
         <h3>Platforms in the MIND SPARK Ecosystem</h3>
         <ul>
-          <li>MIND SPARK Next Topper - Ultimate exam preparation.</li>
+          <li>MIND SPARK Next Toppers - Ultimate exam preparation.</li>
           <li>Vidyagram - Free learning platform.</li>
           <li>Yes Officer - Premium preparation.</li>
           <li>Mission Jeet, Bee Books, Futurekul and Master Sahab.</li>
@@ -403,38 +388,6 @@ export function App() {
       {/* Red ambient glow (top & center) */}
       <div className="fixed top-[-10%] left-1/2 -translate-x-1/2 w-[400px] sm:w-[600px] h-[300px] sm:h-[400px] bg-red-600/20 rounded-full blur-[120px] pointer-events-none z-[-1]" />
       <div className="fixed top-[40%] left-1/2 -translate-x-1/2 w-[300px] sm:w-[800px] h-[400px] sm:h-[600px] bg-red-700/10 rounded-full blur-[150px] pointer-events-none z-[-1]" />
-
-      {/* =============================================================== */}
-      {/* COMPACT ENTERTAINMENT BUTTON (Top Left Side - 4uMovies)         */}
-      {/* =============================================================== */}
-      <a
-        href="https://4umovies.site/"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="fixed top-5 left-4 sm:top-8 sm:left-8 z-40 group p-[1px] rounded-full bg-gradient-to-r from-red-700 via-red-500 to-rose-600 shadow-[0_0_15px_rgba(239,68,68,0.35)] hover:shadow-[0_0_25px_rgba(239,68,68,0.65)] transition-all duration-300 hover:scale-105 active:scale-95"
-        title="Watch Movies & Entertainment on 4uMovies"
-      >
-        <div className="bg-zinc-950/90 backdrop-blur-md px-3 py-2 sm:px-3.5 sm:py-2 rounded-full flex items-center gap-2">
-          {/* Icon with subtle pulse */}
-          <div className="relative flex items-center justify-center">
-            <span className="absolute w-2 h-2 rounded-full bg-red-400 animate-ping opacity-75" />
-            <Clapperboard className="w-4 h-4 text-red-400 relative z-10 group-hover:rotate-12 transition-transform" />
-          </div>
-          {/* Text */}
-          <div className="flex flex-col text-left leading-none">
-            <span className="text-[8px] font-bold uppercase tracking-widest text-red-400">
-              Chill Zone
-            </span>
-            <span className="text-[11px] sm:text-xs font-bold text-white group-hover:text-red-200 transition-colors">
-              4uMovies
-            </span>
-          </div>
-          {/* Small NEW Badge */}
-          <span className="px-1.5 py-0.5 text-[8px] font-extrabold uppercase bg-red-500/20 text-red-300 border border-red-500/40 rounded-full">
-            NEW
-          </span>
-        </div>
-      </a>
 
       {/* Admin Inbox Button (Top Right) */}
       <button
@@ -670,34 +623,76 @@ export function App() {
           className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-5 md:gap-6 w-full max-w-sm md:max-w-3xl lg:max-w-4xl mx-auto z-10"
           aria-label="MIND SPARK Platforms"
         >
-          {PLATFORMS.map((platform) => (
-            <a
-              key={platform.id}
-              href={platform.href}
-              title={platform.title}
-              className="bg-[#121212] border border-white/5 p-5 rounded-3xl platform-card flex flex-col items-center justify-center gap-3 cursor-pointer animate-pop-in group"
-              style={{ animationDelay: `${platform.delayMs}ms` }}
-            >
+          {PLATFORMS.map((platform) => {
+            const isLive = Boolean(platform.href);
+            const cardClasses =
+              'p-5 rounded-3xl flex flex-col items-center justify-center gap-3 animate-pop-in border border-white/5';
+
+            const content = (
+              <>
+                <div
+                  className={`w-16 h-16 sm:w-[72px] sm:h-[72px] rounded-[1.25rem] border-2 ${
+                    isLive ? 'border-red-500' : 'border-zinc-700'
+                  } bg-zinc-950 p-1 flex items-center justify-center transition-all ${
+                    isLive
+                      ? 'group-hover:shadow-[0_0_15px_rgba(239,68,68,0.45)]'
+                      : ''
+                  } ${platform.overflowHidden ? 'overflow-hidden' : ''}`}
+                >
+                  <img
+                    src={platform.imgSrc}
+                    alt={platform.imgAlt}
+                    className={`w-full h-full ${
+                      platform.objectFit === 'contain'
+                        ? 'object-contain'
+                        : 'object-cover'
+                    } rounded-xl ${isLive ? '' : 'opacity-60'}`}
+                  />
+                </div>
+                <h2
+                  className={`font-display font-bold text-[13px] sm:text-[15px] text-center tracking-wide transition-colors ${
+                    isLive
+                      ? 'text-white group-hover:text-red-500'
+                      : 'text-zinc-400'
+                  }`}
+                >
+                  {platform.name}
+                </h2>
+                {!isLive && (
+                  <span className="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-[0.15em] text-red-400 bg-red-500/10 border border-red-500/25">
+                    Coming Soon
+                  </span>
+                )}
+              </>
+            );
+
+            if (isLive) {
+              return (
+                <a
+                  key={platform.id}
+                  href={platform.href}
+                  title={platform.title}
+                  className={`${cardClasses} bg-[#121212] platform-card cursor-pointer group`}
+                  style={{ animationDelay: `${platform.delayMs}ms` }}
+                >
+                  {content}
+                </a>
+              );
+            }
+
+            /* Static, non-clickable placeholder - no link, no navigation */
+            return (
               <div
-                className={`w-16 h-16 sm:w-[72px] sm:h-[72px] rounded-[1.25rem] border-2 border-red-500 bg-zinc-950 p-1 flex items-center justify-center group-hover:shadow-[0_0_15px_rgba(239,68,68,0.45)] transition-all ${
-                  platform.overflowHidden ? 'overflow-hidden' : ''
-                }`}
+                key={platform.id}
+                title={`${platform.name} - Coming Soon`}
+                aria-disabled="true"
+                className={`${cardClasses} bg-[#101010] cursor-default select-none`}
+                style={{ animationDelay: `${platform.delayMs}ms` }}
               >
-                <img
-                  src={platform.imgSrc}
-                  alt={platform.imgAlt}
-                  className={`w-full h-full ${
-                    platform.objectFit === 'contain'
-                      ? 'object-contain'
-                      : 'object-cover'
-                  } rounded-xl`}
-                />
+                {content}
               </div>
-              <h2 className="text-white font-display font-bold text-[13px] sm:text-[15px] text-center tracking-wide group-hover:text-red-500 transition-colors">
-                {platform.name}
-              </h2>
-            </a>
-          ))}
+            );
+          })}
         </nav>
       </main>
 
@@ -710,7 +705,7 @@ export function App() {
         </p>
         <div className="seo-hidden-text">
           MIND SPARK | MIND SPARK free education | MIND SPARK batches |
-          MIND SPARK Next Topper | Vidyagram | Yes Officer | S &amp; F
+          MIND SPARK Next Toppers | Vidyagram | Yes Officer | S &amp; F
         </div>
       </footer>
     </div>

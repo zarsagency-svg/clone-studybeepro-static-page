@@ -2,9 +2,15 @@
 
 A single-page React + TypeScript landing page for **MIND SPARK**, a free education platform. It showcases the platform cards, an admin notification/inbox panel, and a like/message interaction.
 
-The site uses a **red & black** theme: a near-black `#0a0a0a` base, `#121212` / `#18181b` cards, and red accents (`#ef4444` → `#dc2626` → `#b91c1c`), with Syne headings over Inter body text.
+The site uses a **red & black** theme: a near-black `#0a0a0a` base, `#121212` / `#18181b` cards, and red accents (`#ef4444` → `#dc2626` → `#b91c1c`), with Syne headings over Inter body text. The logo is the supplied white four-point spark mark on black.
 
 Built with Vite and `vite-plugin-singlefile`, so `npm run build` produces a **self-contained `dist/index.html`** (JS and CSS inlined) that can be hosted on any static host.
+
+## Platform cards
+
+- **Next Toppers** is the only live card. Clicking it opens `https://xhashikstudy-nt.vercel.app/`.
+- Every other card is a **static, non-clickable "Coming Soon" placeholder**. They are rendered as plain `<div>` elements with no `href`, no click handler, no pointer cursor and no hover animation — clicking them does nothing.
+- Platform names, images and order are otherwise unchanged.
 
 ## Tech stack
 
@@ -42,7 +48,7 @@ npm run preview  # preview the production build locally
 .
 ├── index.html                 # HTML shell, MIND SPARK SEO/OG meta, fonts, favicon
 ├── public/
-│   ├── mind-spark-logo.svg    # red spark brand mark (logo + favicon)
+│   ├── mind-spark-logo.jpeg   # supplied white spark logo (header + favicon)
 │   └── noti.json              # notification count seed
 ├── src/
 │   ├── App.tsx                # main page + platform grid + messaging UI
@@ -66,10 +72,10 @@ The build output is `dist/`. On Vercel / Netlify / Cloudflare Pages, use:
 - **Build command:** `npm run build`
 - **Output directory:** `dist`
 
-Because JS/CSS are inlined into `index.html`, the page also works when deployed to GitHub Pages or any plain static file server. `public/mind-spark-logo.svg` and `public/noti.json` are copied to `dist/` alongside it.
+Because JS/CSS are inlined into `index.html`, the page also works when deployed to GitHub Pages or any plain static file server. `public/mind-spark-logo.jpeg` and `public/noti.json` are copied to `dist/` alongside it.
 
 A GitHub Actions workflow (`.github/workflows/build.yml`) runs install, typecheck, and build on every push and pull request, and uploads `dist/` as a build artifact.
 
 ## Source
 
-Restored from the `clone-studybeepro-static-page.zip` archive, then rebranded to MIND SPARK with a red & black theme. This README, `.gitignore`, the CI workflow, and the SVG logo were added for the repository.
+Restored from the `clone-studybeepro-static-page.zip` archive, then rebranded to MIND SPARK with a red & black theme and the supplied spark logo. This README, `.gitignore` and the CI workflow were added for the repository.
