@@ -21,7 +21,7 @@ interface PlatformItem {
   delayMs: number;
 }
 
-const MIND_SPARK_LOGO = '/mind-spark-logo-new.webp';
+const MIND_SPARK_LOGO = '/mind-spark-logo-red.png';
 
 const PLATFORMS: PlatformItem[] = [  {
     id: 1,
@@ -126,6 +126,7 @@ const PLATFORMS: PlatformItem[] = [  {
   {
     id: 9,
     name: 'UNC Offline',
+    href: 'https://clone-functional-study-page.vercel.app/',
     title: 'UNC Offline via MIND SPARK Mod',
     imgSrc: MIND_SPARK_LOGO,
     imgAlt: 'UNC Offline - MIND SPARK Mod',
@@ -135,6 +136,7 @@ const PLATFORMS: PlatformItem[] = [  {
   {
     id: 10,
     name: 'UNC',
+    href: 'https://studybee-lecture-platform.vercel.app/',
     title: 'UNC available on MIND SPARK',
     imgSrc: MIND_SPARK_LOGO,
     imgAlt: 'UNC - MIND SPARK',
