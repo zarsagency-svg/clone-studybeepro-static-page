@@ -28,7 +28,7 @@ interface AdminMessage {
   likes: number;
 }
 
-const MIND_SPARK_LOGO = '/mind-spark-logo.jpeg';
+const MIND_SPARK_LOGO = '/mind-spark-logo-new.webp';
 
 const PLATFORMS: PlatformItem[] = [  {
     id: 1,
@@ -183,7 +183,7 @@ const PLATFORMS: PlatformItem[] = [  {
     id: 14,
     name: 'Physics Wallah',
     title: 'Physics Wallah on MIND SPARK Platform',
-    imgSrc: 'https://i.ibb.co/h1YdY795/IMG-4134.png',
+    imgSrc: '/platforms/physics-wallah.png',
     imgAlt: 'Physics Wallah - MIND SPARK Mod',
     objectFit: 'contain',
     delayMs: 1250,
