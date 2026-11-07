@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   Bell,
   X,
@@ -212,6 +212,7 @@ const DEFAULT_MESSAGES: AdminMessage[] = [
 ];
 
 export function App() {
+  const physicsServersDialog = useRef<HTMLDialogElement>(null);
   const [unreadCount, setUnreadCount] = useState<number>(1);
   const [subscribersCount, setSubscribersCount] = useState<number | null>(null);
   const [isInboxMounted, setIsInboxMounted] = useState(false);
@@ -633,7 +634,8 @@ export function App() {
           aria-label="MIND SPARK Platforms"
         >
           {PLATFORMS.map((platform) => {
-            const isLive = Boolean(platform.href);
+            const isPhysicsWallah = platform.id === 14;
+            const isLive = Boolean(platform.href) || isPhysicsWallah;
             const cardClasses =
               'p-5 rounded-3xl flex flex-col items-center justify-center gap-3 animate-pop-in border border-white/5';
 
@@ -675,6 +677,22 @@ export function App() {
               </>
             );
 
+            if (isPhysicsWallah) {
+              return (
+                <button
+                  key={platform.id}
+                  type="button"
+                  title={platform.title}
+                  aria-haspopup="dialog"
+                  onClick={() => physicsServersDialog.current?.showModal()}
+                  className={`${cardClasses} bg-[#121212] platform-card cursor-pointer group`}
+                  style={{ animationDelay: `${platform.delayMs}ms` }}
+                >
+                  {content}
+                </button>
+              );
+            }
+
             if (isLive) {
               return (
                 <a
@@ -704,6 +722,39 @@ export function App() {
           })}
         </nav>
       </main>
+
+      {/* Physics Wallah server selection */}
+      <dialog
+        ref={physicsServersDialog}
+        aria-labelledby="physics-servers-title"
+        className="m-auto w-[calc(100%-2rem)] max-w-sm rounded-3xl border border-red-500/25 bg-[#121212] p-6 text-white shadow-2xl backdrop:bg-black/80 backdrop:backdrop-blur-sm"
+        onClick={(event) => {
+          if (event.target === event.currentTarget) physicsServersDialog.current?.close();
+        }}
+      >
+        <div className="mb-5 flex items-start justify-between gap-4">
+          <div>
+            <h2 id="physics-servers-title" className="font-display text-xl font-bold">Physics Wallah</h2>
+            <p className="mt-1 text-sm text-zinc-400">Choose a server to continue</p>
+          </div>
+          <button
+            type="button"
+            aria-label="Close server selection"
+            onClick={() => physicsServersDialog.current?.close()}
+            className="rounded-full p-2 text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-white"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+        <div className="flex flex-col gap-3">
+          <a href="https://rex-lecture-player.vercel.app/" className="flex items-center justify-between rounded-2xl border border-zinc-800 bg-zinc-900 p-4 font-semibold transition-colors hover:border-red-500/60 hover:text-red-400">
+            Server 1 <ArrowRight className="h-4 w-4" />
+          </a>
+          <a href="https://stream.aryavidya.cc/index.php#/" className="flex items-center justify-between rounded-2xl border border-zinc-800 bg-zinc-900 p-4 font-semibold transition-colors hover:border-red-500/60 hover:text-red-400">
+            Server 2 <ArrowRight className="h-4 w-4" />
+          </a>
+        </div>
+      </dialog>
 
       <footer
         className="w-full py-4 text-center mt-6 relative z-10 flex-shrink-0 animate-pop-in"
