@@ -122,6 +122,7 @@ const PLATFORMS: PlatformItem[] = [  {
   {
     id: 8,
     name: 'Master Sahab',
+    href: 'https://master-shabab.vercel.app/',
     title: 'Master Sahab on MIND SPARK Ecosystem',
     imgSrc: 'https://i.ibb.co/JRNh3xd3/IMG-4611.webp',
     imgAlt: 'Master Sahab - MIND SPARK Aura',
