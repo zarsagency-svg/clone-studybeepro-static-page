@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { fetchNotifications, getLastSeen, getVisitorId, setLastSeen, setNotificationLike, type NotificationMessage } from './notifications';
 import {
   Bell,
   X,
@@ -18,14 +19,6 @@ interface PlatformItem {
   objectFit: 'contain' | 'cover';
   overflowHidden?: boolean;
   delayMs: number;
-}
-
-interface AdminMessage {
-  id: string;
-  title?: string;
-  text: string;
-  createdAt: number;
-  likes: number;
 }
 
 const MIND_SPARK_LOGO = '/mind-spark-logo-new.webp';
@@ -201,58 +194,21 @@ const PLATFORMS: PlatformItem[] = [  {
 
 ];
 
-// Bundled default so the inbox shows the notification even if the JSON fetch fails.
-const DEFAULT_MESSAGES: AdminMessage[] = [
-  {
-    id: 'welcome-mr-sad',
-    title: 'A message from Mr Sad, Admin',
-    text: 'Hello everyone, I am Mr Sad, the administrator of MIND SPARK. I hope you are all doing well. It is a pleasure to have you here — I will be sharing important updates and announcements through this channel. If you need any assistance, please feel free to reach out.',
-    createdAt: 1793886497834,
-    likes: 0,
-  },
-];
-
 export function App() {
   const physicsServersDialog = useRef<HTMLDialogElement>(null);
-  const [unreadCount, setUnreadCount] = useState<number>(1);
+  const notificationRequest = useRef(0);
+  const [unreadCount, setUnreadCount] = useState(0);
   const [subscribersCount, setSubscribersCount] = useState<number | null>(null);
   const [isInboxMounted, setIsInboxMounted] = useState(false);
   const [isInboxOpen, setIsInboxOpen] = useState(false);
   const [messagesLoading, setMessagesLoading] = useState(false);
-  const [hasLoadedMessages, setHasLoadedMessages] = useState(false);
-  const [messages, setMessages] = useState<AdminMessage[]>(DEFAULT_MESSAGES);
-  const [likedIds, setLikedIds] = useState<Record<string, boolean>>(() => {
-    try {
-      const initial: Record<string, boolean> = {};
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key && key.startsWith('liked_')) {
-          const docId = key.replace('liked_', '');
-          initial[docId] = true;
-        }
-      }
-      return initial;
-    } catch {
-      return {};
-    }
-  });
+  const [messages, setMessages] = useState<NotificationMessage[]>([]);
+  const [notificationError, setNotificationError] = useState('');
+  const [likePending, setLikePending] = useState(false);
+  const [visitorId] = useState(getVisitorId);
 
-  // Check notifications from noti.json on load (matching the live site)
-  useEffect(() => {
-    async function checkNotifications() {
-      try {
-        const response = await fetch('noti.json?v=' + new Date().getTime());
-        if (response.ok) {
-          const data = await response.json();
-          const count = parseInt(data.count, 10) || 0;
-          setUnreadCount(count);
-        }
-      } catch {
-        // Keep default unread badge of 1 matching live site
-      }
-    }
-    checkNotifications();
-  }, []);
+  // Fetch on page load so the badge reflects messages the visitor has not read.
+  useEffect(() => { void loadAdminMessages(false); }, []);
 
   // Fetch the real MIND SPARK Telegram subscriber count from our own endpoint.
   // Kept server-side: Telegram blocks browser requests to t.me (CORS), and any
@@ -274,81 +230,56 @@ export function App() {
     fetchLiveSubscribers();
   }, []);
 
-  // Load the admin notifications published with this site
-  const loadAdminMessages = async () => {
-    if (hasLoadedMessages) return;
+  const loadAdminMessages = async (markRead = false) => {
+    const requestId = ++notificationRequest.current;
     setMessagesLoading(true);
+    setNotificationError('');
     try {
-      const res = await fetch('adminMessages.json?v=' + new Date().getTime());
-      if (res.ok) {
-        const data = await res.json();
-        const parsed: AdminMessage[] = (Array.isArray(data) ? data : []).map(
-          (item: AdminMessage) => ({
-            id: String(item.id),
-            title: item.title || '',
-            text: String(item.text || ''),
-            createdAt: Number(item.createdAt) || 0,
-            likes: Number(item.likes) || 0,
-          })
-        );
-        parsed.sort((a, b) => b.createdAt - a.createdAt);
-        setMessages(parsed);
+      const data = await fetchNotifications(visitorId);
+      if (requestId !== notificationRequest.current) return;
+      setMessages(data);
+      if (markRead) {
+        setLastSeen(Date.now());
+        setUnreadCount(0);
+      } else {
+        const lastSeen = getLastSeen();
+        setUnreadCount(data.filter((message) => message.createdAt > lastSeen).length);
       }
     } catch {
-      // Keep the bundled default notification
+      if (requestId === notificationRequest.current) setNotificationError('Could not load notifications. Please try again.');
     } finally {
-      setMessagesLoading(false);
-      setHasLoadedMessages(true);
+      if (requestId === notificationRequest.current) setMessagesLoading(false);
     }
   };
 
   const toggleInbox = () => {
     if (!isInboxMounted) {
-      loadAdminMessages();
+      void loadAdminMessages(true);
       setIsInboxMounted(true);
-      setUnreadCount(0);
-      setTimeout(() => {
-        setIsInboxOpen(true);
-      }, 10);
+      setTimeout(() => setIsInboxOpen(true), 10);
     } else {
       setIsInboxOpen(false);
-      setTimeout(() => {
-        setIsInboxMounted(false);
-      }, 300);
+      setTimeout(() => setIsInboxMounted(false), 300);
     }
   };
 
-  const handleToggleLike = (msgId: string) => {
-    const currentlyLiked = !!likedIds[msgId];
-    const nextLiked = !currentlyLiked;
-
-    setLikedIds((prev) => {
-      const updated = { ...prev };
-      if (nextLiked) {
-        updated[msgId] = true;
-      } else {
-        delete updated[msgId];
-      }
-      return updated;
-    });
-
-    try {
-      if (nextLiked) {
-        localStorage.setItem(`liked_${msgId}`, 'true');
-      } else {
-        localStorage.removeItem(`liked_${msgId}`);
-      }
-    } catch {
-      // ignore storage errors
+  const handleToggleLike = async (msg: NotificationMessage) => {
+    if (likePending) return;
+    if (!visitorId) {
+      setNotificationError('Enable browser storage to save likes.');
+      return;
     }
-
-    setMessages((prev) =>
-      prev.map((m) =>
-        m.id === msgId
-          ? { ...m, likes: Math.max(0, m.likes + (nextLiked ? 1 : -1)) }
-          : m
-      )
-    );
+    setLikePending(true);
+    setNotificationError('');
+    try {
+      await setNotificationLike(msg.id, visitorId, !msg.liked);
+      const data = await fetchNotifications(visitorId);
+      setMessages(data);
+    } catch {
+      setNotificationError('Could not confirm your like. Refresh notifications and try again.');
+    } finally {
+      setLikePending(false);
+    }
   };
 
   const formatMessageDate = (createdAt?: number) => {
@@ -470,6 +401,12 @@ export function App() {
               id="messages-container"
               className="flex-1 overflow-y-auto p-4 space-y-4 no-scrollbar"
             >
+              {notificationError && (
+                <div role="alert" className="rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-300">
+                  {notificationError}{' '}
+                  <button type="button" onClick={() => void loadAdminMessages(true)} className="underline">Retry</button>
+                </div>
+              )}
               {messagesLoading ? (
                 <div id="loading-indicator" className="flex flex-col gap-4">
                   <div className="w-full h-24 bg-zinc-800/50 rounded-xl animate-pulse" />
@@ -481,7 +418,7 @@ export function App() {
                 </div>
               ) : (
                 messages.map((msg) => {
-                  const isLiked = !!likedIds[msg.id];
+                  const isLiked = msg.liked;
                   return (
                     <div
                       key={msg.id}
@@ -515,7 +452,9 @@ export function App() {
 
                       <div className="mt-3 pt-3 border-t border-zinc-800/80 flex items-center">
                         <button
-                          onClick={() => handleToggleLike(msg.id)}
+                          onClick={() => void handleToggleLike(msg)}
+                          disabled={likePending}
+                          aria-pressed={isLiked}
                           className={`flex items-center gap-1.5 text-xs font-medium transition-colors cursor-pointer ${
                             isLiked
                               ? 'text-red-500'

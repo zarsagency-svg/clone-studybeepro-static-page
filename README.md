@@ -44,13 +44,12 @@ Production deployments (both auto-deploy from `main`):
 
 ## Notifications
 
-The bell in the top-right opens the admin inbox. Notifications are **owned by this repo** — there is no external Firestore or third-party message API anymore:
+The inbox stores messages and likes in the **Study hive** Supabase project.
+To publish a message, open the Supabase dashboard → Table Editor → `mindspark_notifications` → Insert row. Fill in `title` (optional) and `body` (required); leave `id` and `created_at` at their defaults. Save the row. It appears the next time visitors open the inbox; no redeployment is required. Edit or delete messages in the same table. Deleting a message also removes its likes.
 
-- `public/adminMessages.json` — the array of messages. Edit this file and redeploy to publish, change or remove a notification. Each entry has `id`, `title`, `text`, `createdAt` (epoch ms) and `likes`.
-- `public/noti.json` — the unread badge `count` (currently `1`).
-- `src/App.tsx` holds a bundled copy of the default message so the inbox still works offline or if the JSON fetch fails.
+Likes are saved in the database and shared across visitors. A random ID in browser local storage tracks each browser's own like; clearing storage or changing browser/device creates a new identity. This is not authenticated and cannot prevent deliberate vote manipulation. Existing local-only likes from the old version cannot be recovered as shared counts. Messages can only be managed through the Supabase dashboard; anonymous visitors cannot create or edit them. The site uses public RPC functions with row-level security and no service-role key in browser code.
 
-One notification is currently published, from **Mr Sad · Admin**. Opening the inbox clears the unread badge.
+Vercel requires `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` at build time. Use the publishable key, never the service-role/secret key. For local development set these in `.env.local`. The SQL schema is documented in `supabase/migrations/20261107_mindspark_notifications.sql`; do not rerun it against an existing installation.
 
 ## Tech stack
 
