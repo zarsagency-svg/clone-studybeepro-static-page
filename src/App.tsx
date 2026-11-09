@@ -21,7 +21,7 @@ interface PlatformItem {
   delayMs: number;
 }
 
-const MIND_SPARK_LOGO = '/mind-spark-logo-red.png';
+const MIND_SPARK_LOGO = '/mind-spark-logo-classic.jpeg';
 
 const PLATFORMS: PlatformItem[] = [  {
     id: 1,
@@ -52,15 +52,6 @@ const PLATFORMS: PlatformItem[] = [  {
     imgAlt: 'NoxGlass - distraction-free lecture player',
     objectFit: 'contain',
     delayMs: 600,
-  },  {
-    id: 2,
-    name: 'Vidyagram',
-    title: 'Vidyagram on MIND SPARK Ecosystem',
-    imgSrc: 'https://i.ibb.co/jkHpx8mY/IMG-5932.png',
-    imgAlt: 'Vidyagram Logo',
-    objectFit: 'cover',
-    overflowHidden: true,
-    delayMs: 650,
   },
   {
     id: 3,
@@ -71,46 +62,6 @@ const PLATFORMS: PlatformItem[] = [  {
     imgAlt: 'Mission Jeet - MIND SPARK',
     objectFit: 'contain',
     delayMs: 700,
-  },
-  {
-    id: 4,
-    name: 'S & F',
-    title: 'S & F on MIND SPARK',
-    imgSrc: 'https://i.ibb.co/Hf3Q02xR/IMG-5991.jpg',
-    imgAlt: 'S & F Logo',
-    objectFit: 'cover',
-    overflowHidden: true,
-    delayMs: 750,
-  },
-  {
-    id: 5,
-    name: 'Yes Officer',
-    title: 'Yes Officer on MIND SPARK',
-    imgSrc: 'https://i.ibb.co/8gVcx0RF/IMG-5939.webp',
-    imgAlt: 'Yes Officer Logo',
-    objectFit: 'cover',
-    overflowHidden: true,
-    delayMs: 800,
-  },
-  {
-    id: 6,
-    name: 'Bee Books',
-    title: 'Bee Books by MIND SPARK',
-    imgSrc: 'https://i.ibb.co/S4NNmf24/IMG-4274.png',
-    imgAlt: 'Bee Books - MIND SPARK Edu',
-    objectFit: 'cover',
-    overflowHidden: true,
-    delayMs: 850,
-  },
-  {
-    id: 7,
-    name: 'Futurekul',
-    title: 'Futurekul available on MIND SPARK',
-    imgSrc: 'https://i.ibb.co/676BfqX6/IMG-4571.jpg',
-    imgAlt: 'Futurekul - MIND SPARK',
-    objectFit: 'cover',
-    overflowHidden: true,
-    delayMs: 900,
   },
   {
     id: 8,
@@ -144,26 +95,6 @@ const PLATFORMS: PlatformItem[] = [  {
     delayMs: 1050,
   },
   {
-    id: 11,
-    name: 'Rojgar W/ Ankit',
-    title: 'Rojgar With Ankit on MIND SPARK',
-    imgSrc: '/platforms/rojgar-with-ankit.webp',
-    imgAlt: 'Rojgar With Ankit - MIND SPARK Platform',
-    objectFit: 'cover',
-    overflowHidden: true,
-    delayMs: 1100,
-  },
-  {
-    id: 12,
-    name: 'Selection Bee',
-    title: 'Selection Bee by MIND SPARK',
-    imgSrc: '/platforms/selection-bee.webp',
-    imgAlt: 'Selection Bee - MIND SPARK Edu',
-    objectFit: 'cover',
-    overflowHidden: true,
-    delayMs: 1150,
-  },
-  {
     id: 13,
     name: 'Vibrant Academy',
     href: 'https://vibrantacademy-five.vercel.app/',
@@ -182,16 +113,6 @@ const PLATFORMS: PlatformItem[] = [  {
     imgAlt: 'Physics Wallah - MIND SPARK Mod',
     objectFit: 'contain',
     delayMs: 1250,
-  },
-  {
-    id: 15,
-    name: 'Sachin Academy',
-    title: 'Sachin Academy on MIND SPARK Platform',
-    imgSrc: 'https://i.ibb.co/bj3D47PC/IMG-5822.jpg',
-    imgAlt: 'Sachin Academy - MIND SPARK',
-    objectFit: 'cover',
-    overflowHidden: true,
-    delayMs: 1300,
   },
 
 ];
@@ -319,11 +240,9 @@ export function App() {
         <h3>Platforms in the MIND SPARK Ecosystem</h3>
         <ul>
           <li>MIND SPARK Next Toppers - Ultimate exam preparation.</li>
-          <li>Vidyagram - Free learning platform.</li>
-          <li>Yes Officer - Premium preparation.</li>
-          <li>Mission Jeet, Bee Books, Futurekul and Master Sahab.</li>
-          <li>UNC Offline, Rojgar With Ankit and Selection Bee.</li>
-          <li>Vibrant Academy, Physics Wallah and Sachin Academy.</li>
+          <li>Mission Jeet and Master Sahab.</li>
+          <li>UNC Offline and UNC.</li>
+          <li>Vibrant Academy and Physics Wallah.</li>
         </ul>
         <p>
           Whenever you need free education, think MIND SPARK. All your favourite
@@ -707,7 +626,7 @@ export function App() {
         </p>
         <div className="seo-hidden-text">
           MIND SPARK | MIND SPARK free education | MIND SPARK batches |
-          MIND SPARK Next Toppers | Vidyagram | Yes Officer | S &amp; F
+          MIND SPARK Next Toppers | Mission Jeet | UNC | Physics Wallah
         </div>
       </footer>
     </div>
