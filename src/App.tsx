@@ -34,16 +34,6 @@ const PLATFORMS: PlatformItem[] = [  {
     delayMs: 500,
   },
   {
-    id: 16,
-    name: 'Xhashik Anime',
-    href: 'https://animekai-stream-yvkn.arcada.app/',
-    title: 'Xhashik Anime - Free anime streaming in 1080p, SUB & DUB',
-    imgSrc: '/platforms/xhashik-anime.svg',
-    imgAlt: 'Xhashik Anime - free anime streaming',
-    objectFit: 'contain',
-    delayMs: 550,
-  },
-  {
     id: 17,
     name: 'NoxGlass',
     href: 'https://donotdistract.vercel.app/',

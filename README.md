@@ -8,23 +8,12 @@ Built with Vite and `vite-plugin-singlefile`, so `npm run build` produces a **se
 
 ## Platform cards
 
-There are **17 cards**, all in the same style (square logo + name, red border, identical hover).
+The grid contains the following platforms:
 
-**Live cards (clickable):**
+- Next Toppers, NoxGlass, Mission Jeet, Master Sahab, UNC Offline, UNC, and Vibrant Academy each open their own website.
+- Physics Wallah opens a server selector with two destinations.
 
-| Card | Link | What it is |
-| --- | --- | --- |
-| Next Toppers | `https://xhashikstudy-nt.vercel.app/` | Premium batches & classes |
-| Xhashik Anime | `https://animekai-stream-yvkn.arcada.app/` | Free anime streaming, 1080p SUB & DUB |
-| NoxGlass | `https://donotdistract.vercel.app/` | Distraction-free YouTube lecture player |
-| Mission Jeet | `https://clone-video-lecture-website.vercel.app/` | Video lectures & batches |
-| Vibrant Academy | `https://vibrantacademy-five.vercel.app/` | JEE prep batches & video lectures |
-
-Three of these sit together at the very top of the grid (Next Toppers, Xhashik Anime, NoxGlass). Mission Jeet and Vibrant Academy keep their original positions further down and are live too; each opens its own destination.
-
-The other **12 cards** are static, non-clickable "Coming Soon" placeholders rendered as plain `<div>` elements with no `href`, no click handler, no pointer cursor and no hover animation — clicking them does nothing. A card is live simply by having an `href`.
-
-Logos for the two new cards live in `public/platforms/`: `xhashik-anime.svg` (the site's real favicon) and `noxglass.svg` (custom red/black icon — that site ships no logo).
+Platform logos are stored in `public/platforms/` or linked from their original image hosts.
 
 ## Live Telegram subscriber count
 
