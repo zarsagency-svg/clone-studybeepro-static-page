@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { ArrowRight, ExternalLink, Sparkles, X } from 'lucide-react';
 import { PLATFORMS } from './data/platforms';
 import { PlatformFolderCard } from './components/PlatformFolderCard';
+import { PlatformNeonCard } from './components/PlatformNeonCard';
 import { NotificationsCenter } from './components/NotificationsCenter';
 import {
   GlassChatBubbleIcon,
@@ -12,6 +13,14 @@ import {
 
 export function App() {
   const [subscriberCount, setSubscriberCount] = useState<number | null>(null);
+  const [cardStyle, setCardStyle] = useState<'folder' | 'card'>(() => {
+    try { return localStorage.getItem('mindspark-platform-style') === 'card' ? 'card' : 'folder'; }
+    catch { return 'folder'; }
+  });
+  const chooseCardStyle = (style: 'folder' | 'card') => {
+    setCardStyle(style);
+    try { localStorage.setItem('mindspark-platform-style', style); } catch { /* preference remains for this visit */ }
+  };
   const [isPwModalOpen, setIsPwModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const openPwModal = useCallback(() => setIsPwModalOpen(true), []);
@@ -278,18 +287,28 @@ export function App() {
             PLATFORMS FOLDER GRID (Replicates ref3_real.png 3D Glass Folder
             with tilted platform logo inside & frosted glass front pocket)
         ============================================================ */}
+        <div className="w-full max-w-4xl mx-auto mb-5 flex flex-wrap items-center justify-between gap-3 relative z-10">
+          <span className="text-xs font-semibold text-[#AFC5F8]">Platform style</span>
+          <div role="group" aria-label="Choose platform style" className="flex gap-1 p-1 rounded-full border border-[#AFC5F8]/30 bg-[#0F2270]/70">
+            {(['folder', 'card'] as const).map((style) => (
+              <button key={style} type="button" aria-pressed={cardStyle === style} onClick={() => chooseCardStyle(style)}
+                className={`px-4 py-2 rounded-full text-xs font-bold transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#AFC5F8] ${cardStyle === style ? 'bg-[#6E92F2] text-[#071039]' : 'text-[#E6EDFD] hover:bg-white/10'}`}>
+                {style === 'folder' ? 'Folders' : 'Cards'}
+              </button>
+            ))}
+          </div>
+        </div>
         <nav
           id="platforms-container"
           aria-label="MIND SPARK Platforms"
           className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 w-full max-w-4xl mx-auto z-10"
         >
           {filteredPlatforms.map((item, index) => (
-            <PlatformFolderCard
-              key={item.id}
-              item={item}
-              priority={index < 2}
-              onOpenModal={item.isModal ? openPwModal : undefined}
-            />
+            cardStyle === 'folder' ? (
+              <PlatformFolderCard key={item.id} item={item} priority={index < 2} onOpenModal={item.isModal ? openPwModal : undefined} />
+            ) : (
+              <PlatformNeonCard key={item.id} item={item} priority={index < 2} onOpenModal={item.isModal ? openPwModal : undefined} />
+            )
           ))}
         </nav>
 
