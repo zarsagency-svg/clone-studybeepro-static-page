@@ -164,7 +164,7 @@ export const PLATFORMS: PlatformItem[] = [
   {
     id: 10,
     name: 'UNC',
-    subtitle: 'StudyBee Lecture Portal',
+    subtitle: 'Online Lecture Portal',
     metaText: 'Plus Batches · Top Educators',
     category: 'jee-neet',
     href: 'https://studybee-lecture-platform.vercel.app/',
