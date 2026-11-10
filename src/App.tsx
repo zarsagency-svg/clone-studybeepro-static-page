@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import type { CSSProperties } from 'react';
 import { ArrowRight, ExternalLink, Menu, Sparkles, X } from 'lucide-react';
 import { PLATFORMS } from './data/platforms';
 import { PlatformFolderCard } from './components/PlatformFolderCard';
@@ -11,13 +12,36 @@ import {
   GlassStreamIcon,
 } from './components/GlassIcons3D';
 
+function colourHue(hex: string): number {
+  const r = parseInt(hex.slice(1, 3), 16) / 255;
+  const g = parseInt(hex.slice(3, 5), 16) / 255;
+  const b = parseInt(hex.slice(5, 7), 16) / 255;
+  const max = Math.max(r, g, b), min = Math.min(r, g, b), delta = max - min;
+  if (delta === 0) return 220;
+  const h = max === r ? ((g - b) / delta) % 6 : max === g ? (b - r) / delta + 2 : (r - g) / delta + 4;
+  return (h * 60 + 360) % 360;
+}
+
 export function App() {
   const [subscriberCount, setSubscriberCount] = useState<number | null>(null);
-  const [palette, setPalette] = useState<'blue' | 'red' | 'green' | 'yellow'>(() => {
-    try { const saved = localStorage.getItem('mindspark-palette'); return saved === 'red' || saved === 'green' || saved === 'yellow' ? saved : 'blue'; }
+  const [palette, setPalette] = useState<'blue' | 'red' | 'green' | 'custom'>(() => {
+    try { const saved = localStorage.getItem('mindspark-palette'); return saved === 'yellow' ? 'custom' : saved === 'red' || saved === 'green' || saved === 'custom' ? saved : 'blue'; }
     catch { return 'blue'; }
   });
-  const choosePalette = (choice: 'blue' | 'red' | 'green' | 'yellow') => {
+  const [customColour, setCustomColour] = useState(() => {
+    try {
+      const saved = localStorage.getItem('mindspark-custom-colour');
+      if (saved && /^#[0-9a-f]{6}$/i.test(saved)) return saved;
+      return localStorage.getItem('mindspark-palette') === 'yellow' ? '#e6cc00' : '#a855f7';
+    } catch { return '#a855f7'; }
+  });
+  const changeCustomColour = (colour: string) => {
+    setCustomColour(colour);
+    try { localStorage.setItem('mindspark-custom-colour', colour); } catch { /* use for this visit */ }
+  };
+  const hueShift = colourHue(customColour) - 220;
+  const customStyle = { '--custom-colour': customColour, '--custom-hue-shift': `${hueShift}deg`, '--custom-hue-reverse': `${-hueShift}deg` } as CSSProperties;
+  const choosePalette = (choice: 'blue' | 'red' | 'green' | 'custom') => {
     setPalette(choice);
     try { localStorage.setItem('mindspark-palette', choice); } catch { /* use for this visit */ }
   };
@@ -86,7 +110,8 @@ export function App() {
 
   return (
     <div
-      className={`site-shell ${palette === 'red' ? 'theme-red' : palette === 'green' ? 'theme-green' : palette === 'yellow' ? 'theme-yellow' : ''} min-h-[100dvh] relative flex flex-col items-center pb-14 overflow-x-hidden`}
+      className={`site-shell ${palette === 'red' ? 'theme-red' : palette === 'green' ? 'theme-green' : palette === 'custom' ? 'theme-custom' : ''} min-h-[100dvh] relative flex flex-col items-center pb-14 overflow-x-hidden`}
+      style={customStyle}
     >
       {/* Hidden SEO Content from mindspark-all.vercel.app */}
       <div className="seo-hidden-text">
@@ -137,7 +162,7 @@ export function App() {
           </span>
         </button>
         {isCustomizeOpen && (
-          <section id="customize-panel" aria-label="Customise appearance" className="absolute top-full left-0 mt-3 w-[min(290px,calc(100vw-2rem))] rounded-[22px] p-5 text-[#E6EDFD]"
+          <section id="customize-panel" aria-label="Customise appearance" className="absolute top-full left-0 mt-3 w-[min(290px,calc(100vw-2rem))] rounded-[22px] p-5 text-[#E6EDFD] max-h-[calc(100dvh-90px)] overflow-y-auto"
             style={{ background: 'linear-gradient(155deg, rgba(26,59,176,.96), rgba(7,16,57,.98))', border: '1px solid rgba(175,197,248,.4)', boxShadow: '0 18px 45px rgba(7,16,57,.8), inset 0 1px 2px rgba(230,237,253,.3)', backdropFilter: 'var(--glass-filter)' }}>
             <div className="flex items-center justify-between gap-3 mb-5">
               <h2 className="font-display font-bold text-base">Customise</h2>
@@ -146,13 +171,21 @@ export function App() {
             <div className="palette-switch mb-5">
               <p className="text-xs font-semibold text-white/80 mb-2">Colour palette</p>
               <div role="group" aria-label="Choose colour palette" className="grid grid-cols-2 gap-1 p-1 rounded-2xl border border-white/30 bg-black/30">
-                {(['blue', 'red', 'green', 'yellow'] as const).map((colour) => (
+                {(['blue', 'red', 'green', 'custom'] as const).map((colour) => (
                   <button key={colour} type="button" aria-pressed={palette === colour} onClick={() => choosePalette(colour)}
                     className={`flex flex-1 justify-center items-center gap-1 px-2 py-2 rounded-full text-xs font-bold cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white ${palette === colour ? 'bg-white text-black' : 'text-white hover:bg-white/10'}`}>
-                    <span aria-hidden="true" className="w-3 h-3 rounded-full" style={{backgroundColor: colour === 'blue' ? '#2E5DE6' : colour === 'red' ? '#d00018' : colour === 'green' ? '#98BF0A' : '#e6cc00'}} />{colour === 'blue' ? 'Blue' : colour === 'red' ? 'Red' : colour === 'green' ? 'Green' : 'Yellow'}
+                    <span aria-hidden="true" className="w-3 h-3 rounded-full" style={{backgroundColor: colour === 'blue' ? '#2E5DE6' : colour === 'red' ? '#d00018' : colour === 'green' ? '#98BF0A' : customColour}} />{colour === 'blue' ? 'Blue' : colour === 'red' ? 'Red' : colour === 'green' ? 'Green' : 'Custom'}
                   </button>
                 ))}
               </div>
+              {palette === 'custom' && (
+                <label className="mt-3 flex items-center justify-between gap-3 rounded-xl border border-white/25 bg-black/25 px-3 py-2 text-xs font-semibold text-white cursor-pointer">
+                  <span>Pick your colour <span className="block mt-1 text-white/70 font-normal">Tap to open colour picker</span></span>
+                  <input type="color" aria-label="Pick your custom colour" value={customColour}
+                    onChange={(event) => changeCustomColour(event.target.value)}
+                    className="w-11 h-9 p-0.5 rounded-lg bg-transparent border border-white/40 cursor-pointer" />
+                </label>
+              )}
             </div>
             <div>
               <p className="text-xs font-semibold text-[#AFC5F8] mb-2">Platform style</p>

@@ -229,18 +229,18 @@ body {
 .theme-green > .ambient-glow:nth-of-type(3) { background: rgba(85,140,3,.22) !important; }
 .theme-green > .ambient-glow:nth-of-type(4) { background: rgba(152,191,10,.12) !important; }
 
-/* Warm golden theme based on the yellow palette, with a dark canvas for readable text. */
-.site-shell.theme-yellow {
-  background: radial-gradient(circle at 50% 0%, #9b6400 0%, #624200 30%, #302000 65%, #140d00 100%);
-}
-.theme-yellow > main, .theme-yellow > footer,
-.theme-yellow > .fixed:not(.ambient-glow) { filter: hue-rotate(-165deg); }
-.theme-yellow > main img { filter: hue-rotate(165deg); }
-.theme-yellow .palette-switch { filter: hue-rotate(165deg); }
-.theme-yellow > .ambient-glow:nth-of-type(2) { background: rgba(230,180,0,.28) !important; }
-.theme-yellow > .ambient-glow:nth-of-type(3) { background: rgba(228,114,0,.20) !important; }
-.theme-yellow > .ambient-glow:nth-of-type(4) { background: rgba(229,222,0,.14) !important; }
-
 .theme-red .notification-image { filter: hue-rotate(-140deg); }
 .theme-green .notification-image { filter: hue-rotate(130deg); }
-.theme-yellow .notification-image { filter: hue-rotate(165deg); }
+
+
+/* Custom colour drives a dark, readable multi-stop gradient and matching glass. */
+.site-shell.theme-custom {
+  background: radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--custom-colour) 63%, black) 0%, color-mix(in srgb, var(--custom-colour) 38%, black) 32%, color-mix(in srgb, var(--custom-colour) 17%, black) 74%, #080808 100%);
+}
+.theme-custom > main, .theme-custom > footer,
+.theme-custom > .fixed:not(.ambient-glow) { filter: hue-rotate(var(--custom-hue-shift)); }
+.theme-custom > main img, .theme-custom .notification-image,
+.theme-custom .palette-switch { filter: hue-rotate(var(--custom-hue-reverse)); }
+.theme-custom > .ambient-glow:nth-of-type(2) { background: color-mix(in srgb, var(--custom-colour) 30%, transparent) !important; }
+.theme-custom > .ambient-glow:nth-of-type(3) { background: color-mix(in srgb, var(--custom-colour) 24%, transparent) !important; }
+.theme-custom > .ambient-glow:nth-of-type(4) { background: color-mix(in srgb, var(--custom-colour) 16%, transparent) !important; }
