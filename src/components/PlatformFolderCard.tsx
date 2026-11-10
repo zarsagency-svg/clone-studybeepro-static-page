@@ -222,8 +222,8 @@ export const PlatformFolderCard = React.memo(function PlatformFolderCard({
         />
 
         {/* Keep the platform name clear and readable on every screen size. */}
-        <div className="relative z-10 flex flex-1 items-center justify-center px-2 sm:px-3">
-          <h2 className="font-display font-bold text-center text-[15px] sm:text-[19px] leading-tight tracking-tight text-[#E6EDFD] group-hover:text-white transition-colors break-words [overflow-wrap:anywhere]">
+        <div className="relative z-10 flex flex-1 items-start justify-start px-2 sm:px-3 pt-2 sm:pt-2.5">
+          <h2 className="font-display font-bold text-left text-[13px] sm:text-[15px] leading-tight tracking-tight text-[#E6EDFD] group-hover:text-white transition-colors break-words [overflow-wrap:anywhere]">
             {item.name}
           </h2>
         </div>
