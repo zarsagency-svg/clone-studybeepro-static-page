@@ -110,44 +110,19 @@ body {
 }
 
 @keyframes bellRing {
-  0%, 100% { transform: rotate(0); }
-  25% { transform: rotate(8deg); }
-  50% { transform: rotate(-8deg); }
-  75% { transform: rotate(4deg); }
+  0% { transform: rotate(0); }
+  10% { transform: rotate(12deg); }
+  20% { transform: rotate(-12deg); }
+  30% { transform: rotate(8deg); }
+  40% { transform: rotate(-8deg); }
+  50% { transform: rotate(4deg); }
+  60% { transform: rotate(-4deg); }
+  70%, 100% { transform: rotate(0); }
 }
 
 .animate-bell-ring {
-  transform-origin: center bottom;
-  animation: bellRing 650ms ease-out 1;
-}
-
-/* A calm, recurring cue for unread updates. The long pause keeps it noticeable,
-   not distracting, while the expanding ring reads clearly on touch screens. */
-@keyframes notificationButtonGlow {
-  0%, 68%, 100% { filter: brightness(1); }
-  76% { filter: brightness(1.16); }
-  84% { filter: brightness(1.04); }
-}
-
-@keyframes notificationAttentionRing {
-  0%, 68% { opacity: 0; transform: scale(0.86); }
-  72% { opacity: 0.72; transform: scale(0.94); }
-  90%, 100% { opacity: 0; transform: scale(1.28); }
-}
-
-.notification-button-attention {
-  animation: notificationButtonGlow 3.8s ease-in-out infinite;
-}
-
-.notification-attention-ring {
-  position: absolute;
-  inset: -5px;
-  z-index: -1;
-  pointer-events: none;
-  border: 2px solid rgba(175, 197, 248, 0.78);
-  border-radius: 1.15rem;
-  box-shadow: 0 0 18px rgba(110, 146, 242, 0.55);
-  animation: notificationAttentionRing 3.8s ease-out infinite;
+  transform-origin: bottom;
+  animation: bellRing 2s ease-in-out infinite;
 }
 
 .mindspark-gradient-text {
