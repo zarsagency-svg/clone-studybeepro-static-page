@@ -1,5 +1,5 @@
 {
-  "name": "mind-spark",
+  "name": "react-vite-tailwind",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -13,9 +13,7 @@
     "lucide-react": "^1.71.0",
     "react": "19.2.6",
     "react-dom": "19.2.6",
-    "tailwind-merge": "3.4.0",
-    "@types/three": "^0.187.0",
-    "three": "^0.187.0"
+    "tailwind-merge": "3.4.0"
   },
   "devDependencies": {
     "@tailwindcss/vite": "4.1.17",
