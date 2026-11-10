@@ -13,11 +13,11 @@ import {
 
 export function App() {
   const [subscriberCount, setSubscriberCount] = useState<number | null>(null);
-  const [palette, setPalette] = useState<'blue' | 'red'>(() => {
-    try { return localStorage.getItem('mindspark-palette') === 'red' ? 'red' : 'blue'; }
+  const [palette, setPalette] = useState<'blue' | 'red' | 'green'>(() => {
+    try { const saved = localStorage.getItem('mindspark-palette'); return saved === 'red' || saved === 'green' ? saved : 'blue'; }
     catch { return 'blue'; }
   });
-  const choosePalette = (choice: 'blue' | 'red') => {
+  const choosePalette = (choice: 'blue' | 'red' | 'green') => {
     setPalette(choice);
     try { localStorage.setItem('mindspark-palette', choice); } catch { /* use for this visit */ }
   };
@@ -86,7 +86,7 @@ export function App() {
 
   return (
     <div
-      className={`site-shell ${palette === 'red' ? 'theme-red' : ''} min-h-[100dvh] relative flex flex-col items-center pb-14 overflow-x-hidden`}
+      className={`site-shell ${palette === 'red' ? 'theme-red' : palette === 'green' ? 'theme-green' : ''} min-h-[100dvh] relative flex flex-col items-center pb-14 overflow-x-hidden`}
     >
       {/* Hidden SEO Content from mindspark-all.vercel.app */}
       <div className="seo-hidden-text">
@@ -146,10 +146,10 @@ export function App() {
             <div className="palette-switch mb-5">
               <p className="text-xs font-semibold text-white/80 mb-2">Colour palette</p>
               <div role="group" aria-label="Choose colour palette" className="flex gap-1 p-1 rounded-full border border-white/30 bg-black/30">
-                {(['blue', 'red'] as const).map((colour) => (
+                {(['blue', 'red', 'green'] as const).map((colour) => (
                   <button key={colour} type="button" aria-pressed={palette === colour} onClick={() => choosePalette(colour)}
-                    className={`flex flex-1 justify-center items-center gap-2 px-3 py-2 rounded-full text-xs font-bold cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white ${palette === colour ? 'bg-white text-black' : 'text-white hover:bg-white/10'}`}>
-                    <span aria-hidden="true" className="w-3 h-3 rounded-full" style={{backgroundColor: colour === 'blue' ? '#2E5DE6' : '#d00018'}} />{colour === 'blue' ? 'Blue' : 'Red'}
+                    className={`flex flex-1 justify-center items-center gap-1 px-2 py-2 rounded-full text-xs font-bold cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white ${palette === colour ? 'bg-white text-black' : 'text-white hover:bg-white/10'}`}>
+                    <span aria-hidden="true" className="w-3 h-3 rounded-full" style={{backgroundColor: colour === 'blue' ? '#2E5DE6' : colour === 'red' ? '#d00018' : '#98BF0A'}} />{colour === 'blue' ? 'Blue' : colour === 'red' ? 'Red' : 'Green'}
                   </button>
                 ))}
               </div>

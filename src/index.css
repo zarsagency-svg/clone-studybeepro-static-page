@@ -216,3 +216,15 @@ body {
 .theme-red > .ambient-glow:nth-of-type(2) { background: rgba(208,0,24,.30) !important; }
 .theme-red > .ambient-glow:nth-of-type(3) { background: rgba(156,0,18,.25) !important; }
 .theme-red > .ambient-glow:nth-of-type(4) { background: rgba(182,0,21,.16) !important; }
+
+/* Green palette uses the supplied avocado and lime shades. */
+.site-shell.theme-green {
+  background: radial-gradient(circle at 50% 0%, #558c03 0%, #265902 33%, #092601 76%, #041200 100%);
+}
+.theme-green > main, .theme-green > footer,
+.theme-green > .fixed:not(.ambient-glow) { filter: hue-rotate(-130deg); }
+.theme-green > main img { filter: hue-rotate(130deg); }
+.theme-green .palette-switch { filter: hue-rotate(130deg); }
+.theme-green > .ambient-glow:nth-of-type(2) { background: rgba(152,191,10,.24) !important; }
+.theme-green > .ambient-glow:nth-of-type(3) { background: rgba(85,140,3,.22) !important; }
+.theme-green > .ambient-glow:nth-of-type(4) { background: rgba(152,191,10,.12) !important; }
