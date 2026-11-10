@@ -228,3 +228,15 @@ body {
 .theme-green > .ambient-glow:nth-of-type(2) { background: rgba(152,191,10,.24) !important; }
 .theme-green > .ambient-glow:nth-of-type(3) { background: rgba(85,140,3,.22) !important; }
 .theme-green > .ambient-glow:nth-of-type(4) { background: rgba(152,191,10,.12) !important; }
+
+/* Warm golden theme based on the yellow palette, with a dark canvas for readable text. */
+.site-shell.theme-yellow {
+  background: radial-gradient(circle at 50% 0%, #9b6400 0%, #624200 30%, #302000 65%, #140d00 100%);
+}
+.theme-yellow > main, .theme-yellow > footer,
+.theme-yellow > .fixed:not(.ambient-glow) { filter: hue-rotate(-165deg); }
+.theme-yellow > main img { filter: hue-rotate(165deg); }
+.theme-yellow .palette-switch { filter: hue-rotate(165deg); }
+.theme-yellow > .ambient-glow:nth-of-type(2) { background: rgba(230,180,0,.28) !important; }
+.theme-yellow > .ambient-glow:nth-of-type(3) { background: rgba(228,114,0,.20) !important; }
+.theme-yellow > .ambient-glow:nth-of-type(4) { background: rgba(229,222,0,.14) !important; }
