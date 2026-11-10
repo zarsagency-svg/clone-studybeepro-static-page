@@ -3,7 +3,19 @@ import type { NotificationItem } from '../types/notifications';
 import { X } from 'lucide-react';
 import { GlassEnvelopeNotificationIcon } from './GlassIcons3D';
 
-const NotificationsDrawer = lazy(() => import('./NotificationsDrawer'));
+let drawerModule: Promise<typeof import('./NotificationsDrawer')> | null = null;
+function loadDrawer() {
+  drawerModule ??= import('./NotificationsDrawer').catch((error) => {
+    drawerModule = null;
+    throw error;
+  });
+  return drawerModule;
+}
+function warmDrawer() {
+  // Opportunistic only: a failed warm-up must not interrupt the page.
+  void loadDrawer().catch(() => undefined);
+}
+const NotificationsDrawer = lazy(loadDrawer);
 
 const SUPABASE_URL = 'https://duoynnsuogaekjtdzcrd.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_tt29PlGr1WMeZOY8Pa3IfQ_wmhd6432';
@@ -78,8 +90,9 @@ async function callSupabaseRpc(fnName: string, payload: Record<string, unknown>)
   return res.json();
 }
 
-export const NotificationsCenter: React.FC = () => {
+export const NotificationsCenter = React.memo(function NotificationsCenter() {
   const reqCounter = useRef(0);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [visitorId] = useState<string | null>(getOrCreateVisitorId);
   const [unreadCount, setUnreadCount] = useState<number>(1);
   const [isOpen, setIsOpen] = useState(false);
@@ -139,15 +152,45 @@ export const NotificationsCenter: React.FC = () => {
     loadNotifications(false);
   }, []);
 
+  useEffect(() => {
+    const connection = (navigator as Navigator & {
+      connection?: { saveData?: boolean; effectiveType?: string };
+    }).connection;
+    if (connection?.saveData || /(^|-)2g$/.test(connection?.effectiveType || '')) return;
+
+    let idleId: number | undefined;
+    const timer = window.setTimeout(() => {
+      if ('requestIdleCallback' in window) {
+        idleId = window.requestIdleCallback(warmDrawer, { timeout: 1500 });
+      } else {
+        warmDrawer();
+      }
+    }, 1200);
+    return () => {
+      window.clearTimeout(timer);
+      if (idleId !== undefined) window.cancelIdleCallback(idleId);
+    };
+  }, []);
+
+  useEffect(() => () => {
+    if (closeTimer.current !== null) clearTimeout(closeTimer.current);
+  }, []);
+
   const toggleDrawer = () => {
-    if (isOpen) {
+    if (closeTimer.current !== null) clearTimeout(closeTimer.current);
+    if (isOpen && isVisible) {
       setIsVisible(false);
-      setTimeout(() => setIsOpen(false), 320);
+      const instant = window.matchMedia(
+        '(prefers-reduced-motion: reduce), (max-width: 767px), (pointer: coarse)'
+      ).matches;
+      if (instant) setIsOpen(false);
+      else closeTimer.current = setTimeout(() => setIsOpen(false), 160);
     } else {
+      warmDrawer();
       setShowFloatingToast(false);
       loadNotifications(true);
       setIsOpen(true);
-      setTimeout(() => setIsVisible(true), 15);
+      setIsVisible(true);
     }
   };
 
@@ -201,19 +244,18 @@ export const NotificationsCenter: React.FC = () => {
             role="button"
             tabIndex={0}
             onKeyDown={(e) => e.key === 'Enter' && toggleDrawer()}
-            className="hidden md:flex items-center gap-3 pl-3.5 pr-2.5 py-2 rounded-2xl cursor-pointer transition-all duration-300 hover:-translate-y-0.5 group animate-pop-in"
+            className="hidden md:flex items-center gap-3 pl-3.5 pr-2.5 py-2 rounded-2xl cursor-pointer transition-ui duration-200 hover:-translate-y-0.5 group animate-pop-in"
             style={{
               background:
                 'linear-gradient(135deg, rgba(175,197,248,0.22) 0%, rgba(26,59,176,0.42) 60%, rgba(15,34,112,0.75) 100%)',
-              backdropFilter: 'blur(16px) saturate(160%)',
-              WebkitBackdropFilter: 'blur(16px) saturate(160%)',
+              backdropFilter: 'var(--glass-filter)',
+              WebkitBackdropFilter: 'var(--glass-filter)',
               border: '1px solid rgba(230,237,253,0.38)',
               boxShadow:
                 '0 12px 30px -6px rgba(7,16,57,0.75), inset 0 1px 2px rgba(230,237,253,0.4)',
             }}
           >
             <span className="relative flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#6E92F2] opacity-75" />
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#E6EDFD]" />
             </span>
             <div className="text-left max-w-[200px]">
@@ -242,13 +284,16 @@ export const NotificationsCenter: React.FC = () => {
         <button
           type="button"
           onClick={toggleDrawer}
+          onPointerEnter={warmDrawer}
+          onPointerDown={warmDrawer}
+          onFocus={warmDrawer}
           aria-label="Admin Notifications"
-          className="group relative flex items-center gap-2.5 p-1.5 sm:pr-4 rounded-2xl transition-all duration-300 hover:-translate-y-0.5 hover:scale-[1.03] active:scale-95 cursor-pointer"
+          className="group relative flex items-center gap-2.5 p-1.5 sm:pr-4 rounded-2xl transition-ui duration-200 hover:-translate-y-0.5 hover:scale-[1.03] active:scale-95 cursor-pointer"
           style={{
             background:
               'linear-gradient(145deg, rgba(175,197,248,0.28) 0%, rgba(46,93,230,0.32) 55%, rgba(15,34,112,0.75) 100%)',
-            backdropFilter: 'blur(16px) saturate(170%)',
-            WebkitBackdropFilter: 'blur(16px) saturate(170%)',
+            backdropFilter: 'var(--glass-filter)',
+            WebkitBackdropFilter: 'var(--glass-filter)',
             border: '1px solid rgba(230,237,253,0.45)',
             boxShadow:
               '0 14px 32px -6px rgba(7,16,57,0.8), 0 0 20px rgba(46,93,230,0.35), inset 0 1.5px 2px rgba(230,237,253,0.5)',
@@ -313,4 +358,4 @@ export const NotificationsCenter: React.FC = () => {
       )}
     </>
   );
-};
+});

@@ -17,7 +17,7 @@ export const GlassEnvelopeNotificationIcon: React.FC<IconProps> = ({
     <div className={`relative select-none flex items-center justify-center ${className}`}>
       {/* Ambient glow */}
       <div
-        className="absolute inset-0 rounded-2xl blur-md opacity-75 transition-opacity group-hover:opacity-100"
+        className="absolute inset-0 rounded-2xl opacity-75 transition-opacity group-hover:opacity-100"
         style={{
           background: 'radial-gradient(circle, rgba(110,146,242,0.55) 0%, rgba(46,93,230,0) 75%)',
         }}
@@ -34,7 +34,7 @@ export const GlassEnvelopeNotificationIcon: React.FC<IconProps> = ({
 
       {/* Inner vivid card with 3 lines sticking out the top (tilts & lifts on hover) */}
       <div
-        className={`absolute top-1 w-[64%] h-[68%] rounded-lg flex flex-col gap-1 px-2 pt-2 transition-transform duration-300 group-hover:-translate-y-1 ${
+        className={`absolute top-1 w-[64%] h-[68%] rounded-lg flex flex-col gap-1 px-2 pt-2 transition-transform duration-200 group-hover:-translate-y-1 ${
           hasUnread ? 'animate-bell-ring' : ''
         }`}
         style={{
@@ -54,8 +54,6 @@ export const GlassEnvelopeNotificationIcon: React.FC<IconProps> = ({
         style={{
           background:
             'linear-gradient(160deg, rgba(230,237,253,0.36) 0%, rgba(175,197,248,0.22) 50%, rgba(110,146,242,0.28) 100%)',
-          backdropFilter: 'blur(8px) saturate(160%)',
-          WebkitBackdropFilter: 'blur(8px) saturate(160%)',
           border: '1px solid rgba(230,237,253,0.5)',
           boxShadow:
             '0 6px 14px rgba(7,16,57,0.45), inset 0 2px 3px rgba(230,237,253,0.45), inset 0 -2px 4px rgba(15,34,112,0.35)',
@@ -83,7 +81,7 @@ export const GlassChatBubbleIcon: React.FC<IconProps> = ({ className = 'w-12 h-1
     <div className={`relative select-none flex items-center justify-center ${className}`}>
       {/* Back vivid Ultramarine chat bubble */}
       <div
-        className="absolute left-1 top-1.5 w-[66%] h-[58%] rounded-2xl rounded-bl-sm transition-transform duration-300 group-hover:-translate-x-0.5 group-hover:-translate-y-0.5"
+        className="absolute left-1 top-1.5 w-[66%] h-[58%] rounded-2xl rounded-bl-sm transition-transform duration-200 group-hover:-translate-x-0.5 group-hover:-translate-y-0.5"
         style={{
           background: 'linear-gradient(135deg, #6E92F2 0%, #2E5DE6 65%, #1A3BB0 100%)',
           boxShadow: '0 6px 14px rgba(46,93,230,0.55)',
@@ -93,12 +91,10 @@ export const GlassChatBubbleIcon: React.FC<IconProps> = ({ className = 'w-12 h-1
 
       {/* Front frosted glass chat bubble */}
       <div
-        className="absolute right-1 bottom-1.5 w-[72%] h-[62%] rounded-2xl rounded-br-sm flex items-center justify-center gap-1.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:translate-y-0.5"
+        className="absolute right-1 bottom-1.5 w-[72%] h-[62%] rounded-2xl rounded-br-sm flex items-center justify-center gap-1.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:translate-y-0.5"
         style={{
           background:
             'linear-gradient(135deg, rgba(230,237,253,0.38) 0%, rgba(175,197,248,0.22) 55%, rgba(46,93,230,0.26) 100%)',
-          backdropFilter: 'blur(9px) saturate(160%)',
-          WebkitBackdropFilter: 'blur(9px) saturate(160%)',
           border: '1px solid rgba(230,237,253,0.55)',
           boxShadow:
             '0 8px 18px rgba(7,16,57,0.45), inset 0 1.5px 2px rgba(230,237,253,0.55)',
@@ -135,8 +131,6 @@ export const GlassSearchIcon: React.FC<IconProps> = ({ className = 'w-10 h-10' }
         style={{
           background:
             'linear-gradient(135deg, rgba(230,237,253,0.45) 0%, rgba(175,197,248,0.22) 100%)',
-          backdropFilter: 'blur(6px)',
-          WebkitBackdropFilter: 'blur(6px)',
           border: '1px solid rgba(230,237,253,0.55)',
           boxShadow: '0 4px 10px rgba(7,16,57,0.4)',
         }}
@@ -159,7 +153,7 @@ export const GlassPlayIcon: React.FC<IconProps> = ({ className = 'w-10 h-10' }) 
       {/* Back vivid triangle */}
       <svg
         viewBox="0 0 36 36"
-        className="absolute left-0.5 w-7 h-7 drop-shadow-[0_4px_10px_rgba(46,93,230,0.6)]"
+        className="absolute left-0.5 w-7 h-7"
       >
         <defs>
           <linearGradient id="playBackGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -179,8 +173,6 @@ export const GlassPlayIcon: React.FC<IconProps> = ({ className = 'w-10 h-10' }) 
         style={{
           background:
             'linear-gradient(135deg, rgba(230,237,253,0.44) 0%, rgba(175,197,248,0.22) 100%)',
-          backdropFilter: 'blur(7px)',
-          WebkitBackdropFilter: 'blur(7px)',
           border: '1px solid rgba(230,237,253,0.55)',
           boxShadow: '0 6px 14px rgba(7,16,57,0.4), inset 0 1px 2px rgba(230,237,253,0.55)',
           clipPath: 'polygon(18% 10%, 92% 50%, 18% 90%)',
@@ -211,8 +203,6 @@ export const GlassDocsIcon: React.FC<IconProps> = ({ className = 'w-10 h-10' }) 
         style={{
           background:
             'linear-gradient(145deg, rgba(230,237,253,0.42) 0%, rgba(175,197,248,0.22) 100%)',
-          backdropFilter: 'blur(8px)',
-          WebkitBackdropFilter: 'blur(8px)',
           border: '1px solid rgba(230,237,253,0.55)',
           boxShadow: '0 6px 14px rgba(7,16,57,0.4), inset 0 1px 1px rgba(230,237,253,0.55)',
         }}
@@ -236,7 +226,7 @@ export const GlassShieldIcon: React.FC<IconProps> = ({ className = 'w-10 h-10' }
       {/* Vivid shield */}
       <svg
         viewBox="0 0 36 36"
-        className="w-7 h-7 translate-x-1 drop-shadow-[0_4px_12px_rgba(46,93,230,0.55)]"
+        className="w-7 h-7 translate-x-1"
       >
         <defs>
           <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -255,8 +245,6 @@ export const GlassShieldIcon: React.FC<IconProps> = ({ className = 'w-10 h-10' }
         style={{
           background:
             'linear-gradient(135deg, rgba(230,237,253,0.48) 0%, rgba(175,197,248,0.25) 100%)',
-          backdropFilter: 'blur(6px)',
-          WebkitBackdropFilter: 'blur(6px)',
           border: '1px solid rgba(230,237,253,0.65)',
           boxShadow: '0 4px 10px rgba(7,16,57,0.45)',
         }}
@@ -297,8 +285,6 @@ export const GlassMedalIcon: React.FC<IconProps> = ({ className = 'w-10 h-10' })
         style={{
           background:
             'linear-gradient(135deg, rgba(230,237,253,0.46) 0%, rgba(110,146,242,0.28) 100%)',
-          backdropFilter: 'blur(7px)',
-          WebkitBackdropFilter: 'blur(7px)',
           border: '1px solid rgba(230,237,253,0.6)',
           boxShadow: '0 4px 12px rgba(46,93,230,0.45), inset 0 1px 2px rgba(230,237,253,0.55)',
         }}
@@ -339,8 +325,6 @@ export const GlassStreamIcon: React.FC<IconProps> = ({ className = 'w-11 h-11' }
         style={{
           background:
             'linear-gradient(145deg, rgba(230,237,253,0.45) 0%, rgba(175,197,248,0.22) 100%)',
-          backdropFilter: 'blur(8px)',
-          WebkitBackdropFilter: 'blur(8px)',
           border: '1px solid rgba(230,237,253,0.58)',
           boxShadow: '0 6px 14px rgba(7,16,57,0.45)',
         }}

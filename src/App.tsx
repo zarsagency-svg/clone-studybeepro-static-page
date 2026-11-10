@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { ArrowRight, ExternalLink, Sparkles, X } from 'lucide-react';
 import { PLATFORMS } from './data/platforms';
 import { PlatformFolderCard } from './components/PlatformFolderCard';
@@ -14,6 +14,7 @@ export function App() {
   const [subscriberCount, setSubscriberCount] = useState<number | null>(18);
   const [isPwModalOpen, setIsPwModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const openPwModal = useCallback(() => setIsPwModalOpen(true), []);
 
   useEffect(() => {
     let mounted = true;
@@ -36,8 +37,8 @@ export function App() {
     };
   }, []);
 
+  const q = searchQuery.trim().toLowerCase();
   const filteredPlatforms = PLATFORMS.filter((item) => {
-    const q = searchQuery.trim().toLowerCase();
     const matchesSearch =
       !q ||
       item.name.toLowerCase().includes(q) ||
@@ -50,11 +51,7 @@ export function App() {
 
   return (
     <div
-      className="min-h-[100dvh] relative flex flex-col items-center pb-14 overflow-x-hidden"
-      style={{
-        background:
-          'radial-gradient(circle at 50% 0%, #1A3BB0 0%, #0F2270 32%, #071039 74%)',
-      }}
+      className="site-shell min-h-[100dvh] relative flex flex-col items-center pb-14 overflow-x-hidden"
     >
       {/* Hidden SEO Content from mindspark-all.vercel.app */}
       <div className="seo-hidden-text">
@@ -83,21 +80,7 @@ export function App() {
         </p>
       </div>
 
-      {/* ============================================================
-          ULTRAMARINE ATMOSPHERIC BACKGROUND GLOWS (#071039 -> #6E92F2)
-      ============================================================ */}
-      <div
-        className="fixed top-[-12%] left-1/2 -translate-x-1/2 w-[420px] sm:w-[760px] h-[340px] sm:h-[460px] rounded-full blur-[130px] pointer-events-none z-0"
-        style={{ background: 'rgba(46, 93, 230, 0.35)' }}
-      />
-      <div
-        className="fixed top-[38%] left-1/2 -translate-x-1/2 w-[340px] sm:w-[900px] h-[420px] sm:h-[620px] rounded-full blur-[160px] pointer-events-none z-0"
-        style={{ background: 'rgba(26, 59, 176, 0.28)' }}
-      />
-      <div
-        className="fixed bottom-[-15%] left-1/4 w-[320px] sm:w-[520px] h-[320px] rounded-full blur-[140px] pointer-events-none z-0"
-        style={{ background: 'rgba(110, 146, 242, 0.16)' }}
-      />
+      {/* Atmospheric colour is painted once by .site-shell; no fixed blur layers. */}
 
       {/* ============================================================
           REDESIGNED 3D GLASSMORPHIC NOTIFICATIONS & INBOX
@@ -107,19 +90,14 @@ export function App() {
       {/* ============================================================
           MAIN CONTENT CONTAINER
       ============================================================ */}
-      <main className="w-full max-w-5xl mx-auto px-4 sm:px-6 pt-6 sm:pt-10 pb-8 flex flex-col items-center justify-center relative z-10 flex-1">
+      <main className="w-full max-w-5xl mx-auto px-4 sm:px-6 pt-18 sm:pt-22 xl:pt-8 pb-8 flex flex-col items-center justify-center relative z-10 flex-1">
         {/* ============================================================
             HERO HEADER: STATIC "MIND SPARK" NAME
-            (3D book source retained, but not displayed by user request)
         ============================================================ */}
         <header className="text-center mb-8 w-full flex-shrink-0 relative flex flex-col items-center">
-          {/* The 3D book is intentionally hidden until its original textures are supplied.
-              Its full source is preserved in components/PaladinsBook3D.tsx. */}
-
           {/* Static Website Title: no looping animation or text glow */}
           <h1
             className="font-display font-extrabold leading-[1.08] flex flex-col items-center justify-center animate-pop-in select-none"
-            style={{ animationDelay: '140ms' }}
           >
             <span className="text-xs sm:text-sm font-bold uppercase tracking-[0.32em] text-[#AFC5F8] mb-1.5 flex items-center gap-2">
               <span className="h-[1px] w-6 bg-gradient-to-r from-transparent to-[#6E92F2]" />
@@ -129,7 +107,7 @@ export function App() {
 
             {/* MIND SPARK Name */}
             <span
-              className="text-[2.65rem] sm:text-[4.1rem] md:text-[4.6rem] tracking-tight inline-flex flex-wrap items-center justify-center gap-x-[2px]"
+              className="text-[clamp(1.5rem,7.5vw,4.6rem)] tracking-tight inline-flex flex-nowrap items-center justify-center gap-x-[2px]"
             >
               {mindSparkLetters.map((char, idx) =>
                 char === ' ' ? (
@@ -149,7 +127,6 @@ export function App() {
           {/* Subtitle with Frosted Glass "Free" Pill */}
           <p
             className="text-[#AFC5F8] font-display text-sm sm:text-base mt-3.5 font-medium tracking-wide animate-pop-in flex items-center justify-center flex-wrap gap-1.5"
-            style={{ animationDelay: '240ms' }}
           >
             <span>Education Must Be</span>
             <span
@@ -160,7 +137,7 @@ export function App() {
                 border: '1px solid rgba(230,237,253,0.5)',
                 boxShadow:
                   '0 4px 16px rgba(46,93,230,0.45), inset 0 1px 1px rgba(230,237,253,0.45)',
-                backdropFilter: 'blur(8px)',
+                backdropFilter: 'var(--glass-filter)',
               }}
             >
               <Sparkles className="w-3.5 h-3.5 text-[#E6EDFD]" />
@@ -176,7 +153,6 @@ export function App() {
         ============================================================ */}
         <div
           className="w-full max-w-md sm:max-w-lg mx-auto mb-8 animate-pop-in relative pt-2.5"
-          style={{ animationDelay: '320ms' }}
         >
           {/* Tilted Vivid Ultramarine Back Plate peeking behind the Frosted Glass Front */}
           <div
@@ -193,12 +169,12 @@ export function App() {
             href="https://t.me/zarsstudy"
             target="_blank"
             rel="noopener noreferrer"
-            className="group relative block rounded-[24px] p-4 sm:p-5 overflow-hidden transition-all duration-300 hover:-translate-y-1"
+            className="group relative block rounded-[24px] p-4 sm:p-5 overflow-hidden transition-ui duration-200 hover:-translate-y-1"
             style={{
               background:
-                'linear-gradient(145deg, rgba(175,197,248,0.28) 0%, rgba(110,146,242,0.18) 45%, rgba(15,34,112,0.72) 100%)',
-              backdropFilter: 'blur(16px) saturate(175%)',
-              WebkitBackdropFilter: 'blur(16px) saturate(175%)',
+                'var(--community-background)',
+              backdropFilter: 'var(--glass-filter)',
+              WebkitBackdropFilter: 'var(--glass-filter)',
               borderTop: '1.5px solid rgba(230,237,253,0.62)',
               borderLeft: '1px solid rgba(230,237,253,0.38)',
               borderRight: '1px solid rgba(175,197,248,0.28)',
@@ -209,7 +185,7 @@ export function App() {
           >
             {/* Shimmer Sweep */}
             <div
-              className="pointer-events-none absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out"
+              className="desktop-sheen pointer-events-none absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-500 ease-in-out"
               style={{
                 background:
                   'linear-gradient(90deg, transparent, rgba(230,237,253,0.22), transparent)',
@@ -224,7 +200,7 @@ export function App() {
                     Join Our Telegram
                   </h3>
                   <div className="flex items-center gap-2 mt-1">
-                    <span className="w-2 h-2 rounded-full bg-[#6E92F2] animate-pulse shadow-[0_0_8px_#6E92F2]" />
+                    <span className="w-2 h-2 rounded-full bg-[#6E92F2] shadow-[0_0_8px_#6E92F2]" />
                     <span
                       id="live-count-display"
                       className="text-[#AFC5F8] text-[11px] sm:text-[12px] font-semibold font-mono uppercase tracking-wider"
@@ -244,7 +220,7 @@ export function App() {
               </div>
 
               <div
-                className="w-10 h-10 rounded-2xl flex items-center justify-center text-[#E6EDFD] transition-all duration-300 group-hover:scale-110 group-hover:translate-x-0.5 shrink-0"
+                className="w-10 h-10 rounded-2xl flex items-center justify-center text-[#E6EDFD] transition-ui duration-200 group-hover:scale-110 group-hover:translate-x-0.5 shrink-0"
                 style={{
                   background: 'linear-gradient(135deg, #6E92F2 0%, #2E5DE6 100%)',
                   border: '1px solid rgba(230,237,253,0.55)',
@@ -262,7 +238,6 @@ export function App() {
         ============================================================ */}
         <div
           className="w-full max-w-4xl mx-auto mb-7 flex flex-col sm:flex-row items-stretch sm:items-center sm:justify-end gap-3 animate-pop-in"
-          style={{ animationDelay: '430ms' }}
         >
           {/* Search Input with ref2.jpg GlassSearchIcon */}
           <div
@@ -270,7 +245,7 @@ export function App() {
             style={{
               background:
                 'linear-gradient(145deg, rgba(175,197,248,0.18) 0%, rgba(15,34,112,0.58) 100%)',
-              backdropFilter: 'blur(12px)',
+              backdropFilter: 'var(--glass-filter)',
               border: '1px solid rgba(175,197,248,0.32)',
             }}
           >
@@ -287,6 +262,7 @@ export function App() {
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
+                aria-label="Clear platform search"
                 className="text-[#AFC5F8] hover:text-[#E6EDFD] p-0.5 cursor-pointer"
               >
                 <X className="w-3.5 h-3.5" />
@@ -309,7 +285,7 @@ export function App() {
               key={item.id}
               item={item}
               priority={index < 2}
-              onOpenModal={item.isModal ? () => setIsPwModalOpen(true) : undefined}
+              onOpenModal={item.isModal ? openPwModal : undefined}
             />
           ))}
         </nav>
@@ -320,7 +296,7 @@ export function App() {
             style={{
               background: 'rgba(15, 34, 112, 0.45)',
               border: '1px solid rgba(175, 197, 248, 0.25)',
-              backdropFilter: 'blur(12px)',
+              backdropFilter: 'var(--glass-filter)',
             }}
           >
             <p className="text-sm text-[#E6EDFD] font-semibold">
@@ -353,8 +329,8 @@ export function App() {
           className="fixed inset-0 z-50 flex items-center justify-center p-4"
           style={{
             background: 'rgba(7, 16, 57, 0.76)',
-            backdropFilter: 'blur(12px)',
-            WebkitBackdropFilter: 'blur(12px)',
+            backdropFilter: 'var(--glass-overlay-filter)',
+            WebkitBackdropFilter: 'var(--glass-overlay-filter)',
           }}
         >
           <div
@@ -362,8 +338,8 @@ export function App() {
             style={{
               background:
                 'linear-gradient(160deg, rgba(46,93,230,0.32) 0%, rgba(15,34,112,0.88) 52%, rgba(7,16,57,0.96) 100%)',
-              backdropFilter: 'blur(24px) saturate(180%)',
-              WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+              backdropFilter: 'var(--glass-filter)',
+              WebkitBackdropFilter: 'var(--glass-filter)',
               border: '1.5px solid rgba(230,237,253,0.45)',
               boxShadow:
                 '0 25px 60px -12px rgba(7,16,57,0.95), 0 0 40px rgba(46,93,230,0.35), inset 0 1.5px 2px rgba(230,237,253,0.45)',
@@ -413,11 +389,11 @@ export function App() {
                 <a
                   key={idx}
                   href={srv.href}
-                  className="group relative flex items-center justify-between rounded-2xl p-4 transition-all duration-300 hover:-translate-y-0.5"
+                  className="group relative flex items-center justify-between rounded-2xl p-4 transition-ui duration-200 hover:-translate-y-0.5"
                   style={{
                     background:
                       'linear-gradient(145deg, rgba(175,197,248,0.22) 0%, rgba(26,59,176,0.42) 100%)',
-                    backdropFilter: 'blur(12px)',
+                    backdropFilter: 'var(--glass-filter)',
                     border: '1px solid rgba(230,237,253,0.38)',
                     boxShadow:
                       '0 10px 24px -6px rgba(7,16,57,0.65), inset 0 1px 1px rgba(230,237,253,0.35)',
@@ -443,7 +419,7 @@ export function App() {
                       <p className="text-xs text-[#AFC5F8] mt-0.5">{srv.sub}</p>
                     </div>
                   </div>
-                  <ExternalLink className="h-4 w-4 text-[#AFC5F8] group-hover:text-[#E6EDFD] group-hover:translate-x-0.5 transition-all" />
+                  <ExternalLink className="h-4 w-4 text-[#AFC5F8] group-hover:text-[#E6EDFD] group-hover:translate-x-0.5 transition-ui" />
                 </a>
               ))}
             </div>
@@ -456,7 +432,6 @@ export function App() {
       ============================================================ */}
       <footer
         className="w-full py-5 text-center mt-4 relative z-10 flex-shrink-0 flex flex-col items-center gap-3 animate-pop-in"
-        style={{ animationDelay: '700ms' }}
       >
         <p className="text-[#AFC5F8]/70 text-[11px] font-semibold tracking-[0.22em] uppercase">
           © 2026 MIND SPARK

@@ -7,23 +7,20 @@ interface PlatformFolderCardProps {
   onOpenModal?: () => void;
 }
 
-export const PlatformFolderCard: React.FC<PlatformFolderCardProps> = ({
+export const PlatformFolderCard = React.memo(function PlatformFolderCard({
   item,
   priority = false,
   onOpenModal,
-}) => {
+}: PlatformFolderCardProps) {
   const isInteractive = Boolean(item.href || item.isModal);
 
   const FolderVisual = (
     <div
-      className="group relative w-full aspect-[280/242] select-none transition-all duration-500 ease-out hover:-translate-y-2"
-      style={{
-        perspective: '1000px',
-      }}
+      className="group relative w-full aspect-[280/242] select-none transition-ui duration-200 ease-out hover:-translate-y-2"
     >
       {/* Ambient Ultramarine Floor Shadow & Hover Glow */}
       <div
-        className="pointer-events-none absolute -bottom-3 inset-x-5 h-10 rounded-full blur-xl opacity-70 transition-all duration-500 group-hover:opacity-100 group-hover:scale-105"
+        className="pointer-events-none absolute -bottom-3 inset-x-5 h-10 rounded-full opacity-70 transition-ui duration-200 group-hover:opacity-100 group-hover:scale-105"
         style={{
           background:
             'radial-gradient(ellipse at center, rgba(46,93,230,0.65) 0%, rgba(15,34,112,0.45) 55%, rgba(7,16,57,0) 80%)',
@@ -38,7 +35,7 @@ export const PlatformFolderCard: React.FC<PlatformFolderCardProps> = ({
         viewBox="0 0 280 242"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="absolute inset-0 w-full h-full drop-shadow-[0_18px_32px_rgba(7,16,57,0.78)]"
+        className="folder-backplate absolute inset-0 w-full h-full"
         preserveAspectRatio="none"
       >
         <defs>
@@ -125,7 +122,7 @@ export const PlatformFolderCard: React.FC<PlatformFolderCardProps> = ({
       ">
         {/* White / Alabaster Ice Inner Sheet (matches ref3_real.png white inner bar) */}
         <div
-          className="w-full h-[58%] rounded-[16px] transition-transform duration-500 ease-out group-hover:-translate-y-1"
+          className="w-full h-[58%] rounded-[16px] transition-transform duration-200 ease-out group-hover:-translate-y-1"
           style={{
             background:
               'linear-gradient(180deg, #E6EDFD 0%, #AFC5F8 48%, rgba(110,146,242,0.35) 100%)',
@@ -140,7 +137,7 @@ export const PlatformFolderCard: React.FC<PlatformFolderCardProps> = ({
           className="
             absolute -top-[10%] right-[10%] sm:right-[11%]
             w-[44%] aspect-square rounded-[20px] p-1.5
-            transition-all duration-500 ease-out
+            transition-ui duration-200 ease-out
             group-hover:-translate-y-3.5 group-hover:scale-105
           "
           style={{
@@ -149,7 +146,7 @@ export const PlatformFolderCard: React.FC<PlatformFolderCardProps> = ({
               'linear-gradient(145deg, #071039 0%, #0F2270 65%, #1A3BB0 100%)',
             border: '2px solid rgba(230,237,253,0.78)',
             boxShadow:
-              '0 14px 28px -4px rgba(7,16,57,0.75), 0 0 20px rgba(46,93,230,0.45), inset 0 1px 2px rgba(230,237,253,0.5)',
+              'var(--folder-logo-shadow)',
           }}
         >
           <div className="relative w-full h-full rounded-[14px] overflow-hidden bg-[#071039] flex items-center justify-center">
@@ -179,23 +176,23 @@ export const PlatformFolderCard: React.FC<PlatformFolderCardProps> = ({
       {/* ============================================================
           LAYER 3: FROSTED GLASSMORPHISM FRONT FOLDER POCKET
           Replicates ref3_real.png front pocket with:
-          - Real backdrop-filter blur so the tilted logo inside shows through!
+          - Desktop glass blur; gradient-only glass on touchscreens.
           - 3D Pillowy Inner Cushion Bevel
           - Top-left Title + Subtitle, Top-right (⋮) circle icon,
             Bottom-left status metadata
       ============================================================ */}
       <div
         className="
-          absolute inset-x-0 bottom-0 h-[71.5%] rounded-[22px]
+          folder-pocket absolute inset-x-0 bottom-0 h-[71.5%] rounded-[22px]
           overflow-hidden flex flex-col justify-between
           p-3.5 sm:p-4
-          transition-all duration-500
+          transition-ui duration-200
         "
         style={{
           background:
-            'linear-gradient(155deg, rgba(175,197,248,0.42) 0%, rgba(110,146,242,0.30) 46%, rgba(46,93,230,0.44) 85%, rgba(26,59,176,0.58) 100%)',
-          backdropFilter: 'blur(9px) saturate(165%)',
-          WebkitBackdropFilter: 'blur(9px) saturate(165%)',
+            'var(--folder-pocket-background)',
+          backdropFilter: 'var(--glass-folder-filter)',
+          WebkitBackdropFilter: 'var(--glass-folder-filter)',
           borderTop: '1.5px solid rgba(230,237,253,0.68)',
           borderLeft: '1px solid rgba(230,237,253,0.42)',
           borderRight: '1px solid rgba(175,197,248,0.32)',
@@ -218,7 +215,7 @@ export const PlatformFolderCard: React.FC<PlatformFolderCardProps> = ({
 
         {/* Animated diagonal glass sheen on hover */}
         <div
-          className="pointer-events-none absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out"
+          className="desktop-sheen pointer-events-none absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-500 ease-out"
           style={{
             background:
               'linear-gradient(105deg, transparent 20%, rgba(230,237,253,0.26) 50%, transparent 80%)',
@@ -240,7 +237,7 @@ export const PlatformFolderCard: React.FC<PlatformFolderCardProps> = ({
 
           {/* Circular (⋮) icon matching top-right of ref3_real.png */}
           <div
-            className="shrink-0 w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:bg-[#E6EDFD]/25"
+            className="shrink-0 w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center transition-ui duration-200 group-hover:scale-110 group-hover:bg-[#E6EDFD]/25"
             style={{
               border: '1.25px solid rgba(230,237,253,0.75)',
               background: 'rgba(230,237,253,0.12)',
@@ -274,7 +271,7 @@ export const PlatformFolderCard: React.FC<PlatformFolderCardProps> = ({
             <span>Open</span>
             <svg
               viewBox="0 0 12 12"
-              className="w-2.5 h-2.5 transition-transform duration-300 group-hover:translate-x-0.5"
+              className="w-2.5 h-2.5 transition-transform duration-200 group-hover:translate-x-0.5"
               fill="none"
               stroke="currentColor"
               strokeWidth="1.8"
@@ -295,7 +292,6 @@ export const PlatformFolderCard: React.FC<PlatformFolderCardProps> = ({
         aria-haspopup="dialog"
         onClick={onOpenModal}
         className="w-full text-left cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#6E92F2] rounded-[24px] animate-pop-in"
-        style={{ animationDelay: `${item.delayMs}ms` }}
       >
         {FolderVisual}
       </button>
@@ -308,7 +304,6 @@ export const PlatformFolderCard: React.FC<PlatformFolderCardProps> = ({
         href={item.href}
         title={item.title}
         className="block w-full text-left cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#6E92F2] rounded-[24px] animate-pop-in"
-        style={{ animationDelay: `${item.delayMs}ms` }}
       >
         {FolderVisual}
       </a>
@@ -320,9 +315,8 @@ export const PlatformFolderCard: React.FC<PlatformFolderCardProps> = ({
       title={`${item.name} - Coming Soon`}
       aria-disabled="true"
       className="w-full cursor-default select-none animate-pop-in"
-      style={{ animationDelay: `${item.delayMs}ms` }}
     >
       {FolderVisual}
     </div>
   );
-};
+});

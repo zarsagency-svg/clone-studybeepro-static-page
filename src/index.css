@@ -1,5 +1,21 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url('./assets/fonts/inter-latin-variable.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Syne';
+  font-style: normal;
+  font-weight: 600 800;
+  font-display: swap;
+  src: url('./assets/fonts/syne-latin-variable.woff2') format('woff2');
+}
+
 :root {
   color-scheme: dark;
   /* 7-Shade Ultramarine Palette (Ультрамарин) */
@@ -10,20 +26,59 @@
   --ultra-400: #6E92F2;
   --ultra-200: #AFC5F8;
   --ultra-50: #E6EDFD;
+  --community-background: linear-gradient(145deg, rgba(175,197,248,0.28) 0%, rgba(110,146,242,0.18) 45%, rgba(15,34,112,0.72) 100%);
+  --glass-filter: blur(8px) saturate(140%);
+  --glass-overlay-filter: blur(4px);
+  --glass-folder-filter: blur(6px) saturate(145%);
+  --glass-soft-filter: blur(4px);
+  --notification-card-background: linear-gradient(155deg, rgba(175,197,248,0.24) 0%, rgba(110,146,242,0.16) 45%, rgba(15,34,112,0.72) 100%);
+  --folder-shadow: drop-shadow(0 12px 20px rgba(7,16,57,0.65));
+  --folder-logo-shadow: 0 14px 28px -4px rgba(7,16,57,0.75), 0 0 20px rgba(46,93,230,0.45), inset 0 1px 2px rgba(230,237,253,0.5);
+  --folder-pocket-background: linear-gradient(155deg, rgba(175,197,248,0.42) 0%, rgba(110,146,242,0.30) 46%, rgba(46,93,230,0.44) 85%, rgba(26,59,176,0.58) 100%);
 }
 
 body {
   background-color: var(--ultra-950);
   color: var(--ultra-50);
-  scroll-behavior: smooth;
   -webkit-tap-highlight-color: transparent;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   overflow-x: hidden;
 }
 
+/* The same atmospheric blue palette, without fixed offscreen blur surfaces. */
+.site-shell {
+  background:
+    radial-gradient(ellipse 700px 420px at 50% 0, rgba(46,93,230,0.32), transparent 75%),
+    radial-gradient(ellipse 740px 520px at 50% 45%, rgba(26,59,176,0.26), transparent 75%),
+    linear-gradient(180deg, #1A3BB0 0%, #0F2270 32%, #071039 78%);
+}
+
 .font-display {
   letter-spacing: -0.02em;
   font-family: 'Syne', 'Inter', sans-serif;
+}
+
+.folder-backplate {
+  filter: var(--folder-shadow);
+}
+
+.folder-pocket {
+  /* Keep the pocket stacking order when backdrop-filter is disabled. */
+  z-index: 1;
+}
+
+.transition-ui {
+  transition-property: transform, translate, scale, rotate, opacity, background-color, color, border-color;
+  transition-duration: 160ms;
+  transition-timing-function: ease-out;
+}
+
+.drawer-overlay {
+  transition: opacity 160ms ease-out;
+}
+
+.drawer-panel {
+  transition: transform 160ms ease-out, translate 160ms ease-out, scale 160ms ease-out;
 }
 
 ::-webkit-scrollbar {
@@ -44,56 +99,26 @@ body {
   background: var(--ultra-600);
 }
 
-@keyframes springPop {
-  0% {
-    opacity: 0;
-    transform: scale(0.75) translateY(32px);
-  }
-  60% {
-    opacity: 1;
-    transform: scale(1.03) translateY(-6px);
-  }
-  80% {
-    transform: scale(0.99) translateY(2px);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
+@keyframes surfaceEnter {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
 }
 
 .animate-pop-in {
-  opacity: 0;
-  animation: 0.75s cubic-bezier(0.22, 1, 0.36, 1) forwards springPop;
-}
-
-@keyframes levitate {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-8px);
-  }
-}
-
-.animate-levitate {
-  animation: 4.2s ease-in-out infinite levitate;
+  /* Visible by default. No forwards fill retaining a layer for every card. */
+  animation: surfaceEnter 160ms ease-out;
 }
 
 @keyframes bellRing {
-  0% { transform: rotate(0); }
-  10% { transform: rotate(12deg); }
-  20% { transform: rotate(-12deg); }
-  30% { transform: rotate(8deg); }
-  40% { transform: rotate(-8deg); }
-  50% { transform: rotate(4deg); }
-  60% { transform: rotate(-4deg); }
-  70%, 100% { transform: rotate(0); }
+  0%, 100% { transform: rotate(0); }
+  25% { transform: rotate(8deg); }
+  50% { transform: rotate(-8deg); }
+  75% { transform: rotate(4deg); }
 }
 
 .animate-bell-ring {
   transform-origin: center bottom;
-  animation: 2s ease-in-out infinite bellRing;
+  animation: bellRing 650ms ease-out 1;
 }
 
 .mindspark-gradient-text {
@@ -131,4 +156,49 @@ body {
   padding: 0;
   position: absolute;
   overflow: hidden;
+}
+
+/* Touchscreens use the same shapes and colours, without live glass sampling. */
+@media (max-width: 767px), (pointer: coarse) {
+  :root { --notification-card-background: linear-gradient(155deg, #38589f 0%, #233f87 45%, #101f5c 100%); }
+  :root {
+    --community-background: linear-gradient(145deg, #5377D8 0%, #294FB9 45%, #0F2270 100%);
+    --glass-filter: none;
+    --glass-overlay-filter: none;
+    --glass-folder-filter: none;
+    --glass-soft-filter: none;
+    --folder-shadow: none;
+    --folder-logo-shadow: 0 5px 12px -3px rgba(7,16,57,0.65), inset 0 1px 2px rgba(230,237,253,0.5);
+    --folder-pocket-background: linear-gradient(155deg, rgba(152,181,249,0.94) 0%, rgba(93,133,236,0.96) 36%, rgba(51,91,210,0.97) 70%, rgba(26,59,176,0.98) 100%);
+  }
+
+  .animate-pop-in,
+  .animate-bell-ring {
+    animation: none;
+    opacity: 1;
+  }
+
+  .transition-ui,
+  .transition-transform,
+  .transition-opacity,
+  .transition-colors {
+    transition-duration: 120ms;
+  }
+
+  .desktop-sheen {
+    display: none;
+  }
+
+  .drawer-overlay,
+  .drawer-panel {
+    transition-duration: 0ms;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition-duration: 0ms !important;
+    scroll-behavior: auto !important;
+  }
 }
