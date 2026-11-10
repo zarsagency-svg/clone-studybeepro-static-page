@@ -1,13 +1,27 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode, type CSSProperties } from 'react';
 
 type Turnstile = { render: (element: HTMLElement, options: Record<string, unknown>) => string; remove: (id: string) => void; reset: (id: string) => void };
 declare global { interface Window { turnstile?: Turnstile } }
 const SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY;
 const STORAGE_KEY = 'mindspark-human-verified';
 
+function getSavedTheme() {
+  try {
+    const palette = localStorage.getItem('mindspark-palette');
+    const colour = localStorage.getItem('mindspark-custom-colour');
+    const validColours = ['#a855f7', '#7542df', '#ed49bb', '#ed7b18', '#06b5ab', '#ce36c8'];
+    if (palette === 'red') return { name: 'theme-red', colour: '#d00018' };
+    if (palette === 'green') return { name: 'theme-green', colour: '#98bf0a' };
+    if (palette === 'custom') return { name: 'theme-custom', colour: colour && validColours.includes(colour.toLowerCase()) ? colour : '#a855f7' };
+  } catch { /* use the default when browser storage is unavailable */ }
+  return { name: '', colour: '#2e5de6' };
+}
+
+
 export function HumanVerification({ children }: { children: ReactNode }) {
   const [verified, setVerified] = useState(() => { try { return sessionStorage.getItem(STORAGE_KEY) === 'yes'; } catch { return false; } });
   const [message, setMessage] = useState('Complete the check below to continue.');
+  const [theme] = useState(getSavedTheme);
   const widget = useRef<HTMLDivElement>(null);
   const id = useRef<string | null>(null);
 
@@ -49,13 +63,15 @@ export function HumanVerification({ children }: { children: ReactNode }) {
   }, [verified]);
 
   if (verified) return <>{children}</>;
-  return <main style={{minHeight:'100dvh', display:'grid', placeItems:'center', padding:'24px', background:'radial-gradient(circle at 50% 0%, #1A3BB0, #0F2270 35%, #071039 80%)', color:'#e6edfd'}}>
-    <section style={{width:'min(100%, 420px)', padding:'32px 24px', borderRadius:24, textAlign:'center', background:'rgba(15,34,112,.82)', border:'1px solid rgba(175,197,248,.4)', boxShadow:'0 20px 60px rgba(7,16,57,.5)'}}>
-      <p style={{fontSize:12, letterSpacing:'.25em', color:'#afc5f8', fontWeight:700}}>MIND SPARK</p>
+  return <main className={`site-shell ${theme.name}`} style={{minHeight:'100dvh', display:'grid', placeItems:'center', padding:'24px', position:'relative', overflow:'hidden', color:'#e6edfd', '--custom-colour': theme.colour} as CSSProperties}>
+    <div aria-hidden="true" style={{position:'absolute', pointerEvents:'none', top:'-12%', left:'50%', transform:'translateX(-50%)', width:'min(760px, 95vw)', height:460, borderRadius:'50%', filter:'blur(130px)', background:theme.colour, opacity:.25}} />
+    <div aria-hidden="true" style={{position:'absolute', pointerEvents:'none', top:'38%', left:'50%', transform:'translateX(-50%)', width:'min(900px, 95vw)', height:620, borderRadius:'50%', filter:'blur(160px)', background:theme.colour, opacity:.18}} />
+    <section style={{position:'relative', width:'min(100%, 420px)', padding:'32px 24px', borderRadius:24, textAlign:'center', background:'rgba(8, 12, 22, .82)', border:'1px solid rgba(255,255,255,.32)', boxShadow:'0 20px 60px rgba(0,0,0,.5)'}}>
+      <p style={{fontSize:12, letterSpacing:'.25em', color:'#e6edfd', fontWeight:700}}>MIND SPARK</p>
       <h1 style={{fontSize:24, fontWeight:800, margin:'12px 0'}}>Verify you’re human</h1>
-      <p role="status" style={{color:'#afc5f8', fontSize:14, marginBottom:24}}>{message}</p>
+      <p role="status" style={{color:'#e6edfd', fontSize:14, marginBottom:24}}>{message}</p>
       <div ref={widget} style={{display:'flex', justifyContent:'center', minHeight:65}} />
-      <p style={{fontSize:12, color:'#afc5f8', marginTop:20}}>Verification is provided by Cloudflare.</p>
+      <p style={{fontSize:12, color:'#e6edfd', marginTop:20}}>Verification is provided by Cloudflare.</p>
     </section>
   </main>;
 }
