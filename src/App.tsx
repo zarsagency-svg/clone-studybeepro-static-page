@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
-import { ArrowRight, ExternalLink, Sparkles, X } from 'lucide-react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { ArrowRight, ExternalLink, Menu, Sparkles, X } from 'lucide-react';
 import { PLATFORMS } from './data/platforms';
 import { PlatformFolderCard } from './components/PlatformFolderCard';
 import { PlatformNeonCard } from './components/PlatformNeonCard';
@@ -30,6 +30,23 @@ export function App() {
     setCardStyle(style);
     try { localStorage.setItem('mindspark-platform-style', style); } catch { /* preference remains for this visit */ }
   };
+  const [isCustomizeOpen, setIsCustomizeOpen] = useState(false);
+  const customizeRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!isCustomizeOpen) return;
+    const onPointerDown = (event: PointerEvent) => {
+      if (!customizeRef.current?.contains(event.target as Node)) setIsCustomizeOpen(false);
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsCustomizeOpen(false);
+        customizeRef.current?.querySelector<HTMLButtonElement>('button')?.focus();
+      }
+    };
+    document.addEventListener('pointerdown', onPointerDown);
+    document.addEventListener('keydown', onKeyDown);
+    return () => { document.removeEventListener('pointerdown', onPointerDown); document.removeEventListener('keydown', onKeyDown); };
+  }, [isCustomizeOpen]);
   const [isPwModalOpen, setIsPwModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const openPwModal = useCallback(() => setIsPwModalOpen(true), []);
@@ -106,6 +123,51 @@ export function App() {
       {/* ============================================================
           REDESIGNED 3D GLASSMORPHIC NOTIFICATIONS & INBOX
       ============================================================ */}
+      <div ref={customizeRef} className="fixed top-4 left-4 sm:top-6 sm:left-7 z-40">
+        <button type="button" aria-label="Customise appearance" aria-expanded={isCustomizeOpen}
+          aria-controls="customize-panel" onClick={() => setIsCustomizeOpen((open) => !open)}
+          className="group relative flex items-center gap-2.5 p-1.5 sm:pr-4 rounded-2xl transition-ui duration-200 hover:-translate-y-0.5 hover:scale-[1.03] active:scale-95 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          style={{ background: 'linear-gradient(145deg, rgba(175,197,248,0.28) 0%, rgba(46,93,230,0.32) 55%, rgba(15,34,112,0.75) 100%)', backdropFilter: 'var(--glass-filter)', WebkitBackdropFilter: 'var(--glass-filter)', border: '1px solid rgba(230,237,253,0.45)', boxShadow: '0 14px 32px -6px rgba(7,16,57,0.8), 0 0 20px rgba(46,93,230,0.35), inset 0 1.5px 2px rgba(230,237,253,0.5)' }}>
+          <span className="w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center rounded-xl text-[#E6EDFD]" style={{ background: 'linear-gradient(145deg, rgba(175,197,248,.4), rgba(46,93,230,.35) 55%, rgba(15,34,112,.7))', border: '1px solid rgba(230,237,253,.4)', boxShadow: 'inset 0 1px 2px rgba(255,255,255,.35), 0 5px 12px rgba(7,16,57,.4)' }}>
+            <Menu aria-hidden="true" className="w-6 h-6" strokeWidth={2.3} />
+          </span>
+          <span className="hidden sm:flex flex-col items-start text-left">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-[#AFC5F8] leading-none">Your</span>
+            <span className="text-[13px] font-display font-bold text-[#E6EDFD] leading-tight mt-0.5">Style</span>
+          </span>
+        </button>
+        {isCustomizeOpen && (
+          <section id="customize-panel" aria-label="Customise appearance" className="absolute top-full left-0 mt-3 w-[min(290px,calc(100vw-2rem))] rounded-[22px] p-5 text-[#E6EDFD]"
+            style={{ background: 'linear-gradient(155deg, rgba(26,59,176,.96), rgba(7,16,57,.98))', border: '1px solid rgba(175,197,248,.4)', boxShadow: '0 18px 45px rgba(7,16,57,.8), inset 0 1px 2px rgba(230,237,253,.3)', backdropFilter: 'var(--glass-filter)' }}>
+            <div className="flex items-center justify-between gap-3 mb-5">
+              <h2 className="font-display font-bold text-base">Customise</h2>
+              <button type="button" onClick={() => setIsCustomizeOpen(false)} aria-label="Close customisation" className="p-1 rounded-lg hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-white cursor-pointer"><X className="w-4 h-4" /></button>
+            </div>
+            <div className="palette-switch mb-5">
+              <p className="text-xs font-semibold text-white/80 mb-2">Colour palette</p>
+              <div role="group" aria-label="Choose colour palette" className="flex gap-1 p-1 rounded-full border border-white/30 bg-black/30">
+                {(['blue', 'red'] as const).map((colour) => (
+                  <button key={colour} type="button" aria-pressed={palette === colour} onClick={() => choosePalette(colour)}
+                    className={`flex flex-1 justify-center items-center gap-2 px-3 py-2 rounded-full text-xs font-bold cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white ${palette === colour ? 'bg-white text-black' : 'text-white hover:bg-white/10'}`}>
+                    <span aria-hidden="true" className="w-3 h-3 rounded-full" style={{backgroundColor: colour === 'blue' ? '#2E5DE6' : '#d00018'}} />{colour === 'blue' ? 'Blue' : 'Red'}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div>
+              <p className="text-xs font-semibold text-[#AFC5F8] mb-2">Platform style</p>
+              <div role="group" aria-label="Choose platform style" className="flex gap-1 p-1 rounded-full border border-[#AFC5F8]/30 bg-[#0F2270]/70">
+                {(['folder', 'card'] as const).map((style) => (
+                  <button key={style} type="button" aria-pressed={cardStyle === style} onClick={() => chooseCardStyle(style)}
+                    className={`flex-1 px-3 py-2 rounded-full text-xs font-bold transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#AFC5F8] ${cardStyle === style ? 'bg-[#6E92F2] text-[#071039]' : 'text-[#E6EDFD] hover:bg-white/10'}`}>
+                    {style === 'folder' ? 'Folders' : 'Cards'}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+      </div>
       <NotificationsCenter />
 
       {/* ============================================================
@@ -296,29 +358,6 @@ export function App() {
             PLATFORMS FOLDER GRID (Replicates ref3_real.png 3D Glass Folder
             with tilted platform logo inside & frosted glass front pocket)
         ============================================================ */}
-        <div className="palette-switch w-full max-w-4xl mx-auto mb-3 flex flex-wrap items-center justify-between gap-3 relative z-10">
-          <span className="text-xs font-semibold text-white/80">Colour palette</span>
-          <div role="group" aria-label="Choose colour palette" className="flex gap-1 p-1 rounded-full border border-white/30 bg-black/30">
-            {(['blue', 'red'] as const).map((colour) => (
-              <button key={colour} type="button" aria-pressed={palette === colour} onClick={() => choosePalette(colour)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white ${palette === colour ? 'bg-white text-black' : 'text-white hover:bg-white/10'}`}>
-                <span aria-hidden="true" className="w-3 h-3 rounded-full" style={{backgroundColor: colour === 'blue' ? '#2E5DE6' : '#d00018'}} />
-                {colour === 'blue' ? 'Blue' : 'Red'}
-              </button>
-            ))}
-          </div>
-        </div>
-        <div className="w-full max-w-4xl mx-auto mb-5 flex flex-wrap items-center justify-between gap-3 relative z-10">
-          <span className="text-xs font-semibold text-[#AFC5F8]">Platform style</span>
-          <div role="group" aria-label="Choose platform style" className="flex gap-1 p-1 rounded-full border border-[#AFC5F8]/30 bg-[#0F2270]/70">
-            {(['folder', 'card'] as const).map((style) => (
-              <button key={style} type="button" aria-pressed={cardStyle === style} onClick={() => chooseCardStyle(style)}
-                className={`px-4 py-2 rounded-full text-xs font-bold transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#AFC5F8] ${cardStyle === style ? 'bg-[#6E92F2] text-[#071039]' : 'text-[#E6EDFD] hover:bg-white/10'}`}>
-                {style === 'folder' ? 'Folders' : 'Cards'}
-              </button>
-            ))}
-          </div>
-        </div>
         <nav
           id="platforms-container"
           aria-label="MIND SPARK Platforms"
