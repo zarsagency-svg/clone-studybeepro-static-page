@@ -340,7 +340,7 @@ export function App() {
                         <>
                           {subscriberCount.toLocaleString()}{' '}
                           <span className="hidden sm:inline">Members</span>
-                          <span className="sm:hidden">Joined</span> · @zarsstudy
+                          <span className="sm:hidden">Joined</span>
                         </>
                       ) : (
                         'Join the community'
