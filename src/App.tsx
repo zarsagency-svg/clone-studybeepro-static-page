@@ -12,6 +12,15 @@ import {
   GlassStreamIcon,
 } from './components/GlassIcons3D';
 
+const CUSTOM_COLOURS = [
+  { name: 'Purple', value: '#a855f7' },
+  { name: 'Violet', value: '#7542df' },
+  { name: 'Pink', value: '#ed49bb' },
+  { name: 'Orange', value: '#ed7b18' },
+  { name: 'Turquoise', value: '#06b5ab' },
+  { name: 'Magenta', value: '#ce36c8' },
+] as const;
+
 function colourHue(hex: string): number {
   const r = parseInt(hex.slice(1, 3), 16) / 255;
   const g = parseInt(hex.slice(3, 5), 16) / 255;
@@ -25,14 +34,13 @@ function colourHue(hex: string): number {
 export function App() {
   const [subscriberCount, setSubscriberCount] = useState<number | null>(null);
   const [palette, setPalette] = useState<'blue' | 'red' | 'green' | 'custom'>(() => {
-    try { const saved = localStorage.getItem('mindspark-palette'); return saved === 'yellow' ? 'custom' : saved === 'red' || saved === 'green' || saved === 'custom' ? saved : 'blue'; }
+    try { const saved = localStorage.getItem('mindspark-palette'); return saved === 'red' || saved === 'green' || saved === 'custom' ? saved : 'blue'; }
     catch { return 'blue'; }
   });
   const [customColour, setCustomColour] = useState(() => {
     try {
       const saved = localStorage.getItem('mindspark-custom-colour');
-      if (saved && /^#[0-9a-f]{6}$/i.test(saved)) return saved;
-      return localStorage.getItem('mindspark-palette') === 'yellow' ? '#e6cc00' : '#a855f7';
+      return CUSTOM_COLOURS.some((colour) => colour.value === saved?.toLowerCase()) ? saved!.toLowerCase() : '#a855f7';
     } catch { return '#a855f7'; }
   });
   const changeCustomColour = (colour: string) => {
@@ -179,12 +187,19 @@ export function App() {
                 ))}
               </div>
               {palette === 'custom' && (
-                <label className="mt-3 flex items-center justify-between gap-3 rounded-xl border border-white/25 bg-black/25 px-3 py-2 text-xs font-semibold text-white cursor-pointer">
-                  <span>Pick your colour <span className="block mt-1 text-white/70 font-normal">Tap to open colour picker</span></span>
-                  <input type="color" aria-label="Pick your custom colour" value={customColour}
-                    onChange={(event) => changeCustomColour(event.target.value)}
-                    className="w-11 h-9 p-0.5 rounded-lg bg-transparent border border-white/40 cursor-pointer" />
-                </label>
+                <div className="mt-3 rounded-xl border border-white/25 bg-black/25 px-3 py-3">
+                  <p className="mb-2 text-xs font-semibold text-white">Choose a colour</p>
+                  <div role="group" aria-label="Choose custom colour" className="grid grid-cols-3 gap-2">
+                    {CUSTOM_COLOURS.map((colour) => (
+                      <button key={colour.value} type="button" aria-pressed={customColour === colour.value}
+                        onClick={() => changeCustomColour(colour.value)}
+                        className={`flex flex-col items-center gap-1 rounded-lg px-1 py-2 text-[10px] font-semibold text-white cursor-pointer focus-visible:outline-2 focus-visible:outline-white ${customColour === colour.value ? 'bg-white/20' : 'hover:bg-white/10'}`}>
+                        <span aria-hidden="true" className={`h-7 w-7 rounded-full border-2 ${customColour === colour.value ? 'border-white' : 'border-white/30'}`} style={{ backgroundColor: colour.value }} />
+                        {colour.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               )}
             </div>
             <div>
