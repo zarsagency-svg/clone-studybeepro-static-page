@@ -80,7 +80,10 @@ export function App() {
         </p>
       </div>
 
-      {/* Atmospheric colour is painted once by .site-shell; no fixed blur layers. */}
+      {/* Soft ambient glows, matching the reference background. */}
+      <div aria-hidden="true" className="fixed top-[-12%] left-1/2 -translate-x-1/2 w-[420px] sm:w-[760px] h-[340px] sm:h-[460px] rounded-full blur-[130px] pointer-events-none z-0" style={{ background: 'rgba(46,93,230,0.35)' }} />
+      <div aria-hidden="true" className="fixed top-[38%] left-1/2 -translate-x-1/2 w-[340px] sm:w-[900px] h-[420px] sm:h-[620px] rounded-full blur-[160px] pointer-events-none z-0" style={{ background: 'rgba(26,59,176,0.28)' }} />
+      <div aria-hidden="true" className="fixed bottom-[-15%] left-1/4 w-[320px] sm:w-[520px] h-[320px] rounded-full blur-[140px] pointer-events-none z-0" style={{ background: 'rgba(110,146,242,0.16)' }} />
 
       {/* ============================================================
           REDESIGNED 3D GLASSMORPHIC NOTIFICATIONS & INBOX

@@ -45,12 +45,9 @@ body {
   overflow-x: hidden;
 }
 
-/* The same atmospheric blue palette, without fixed offscreen blur surfaces. */
+/* Match the radial blue background in the reference site. */
 .site-shell {
-  background:
-    radial-gradient(ellipse 700px 420px at 50% 0, rgba(46,93,230,0.32), transparent 75%),
-    radial-gradient(ellipse 740px 520px at 50% 45%, rgba(26,59,176,0.26), transparent 75%),
-    linear-gradient(180deg, #1A3BB0 0%, #0F2270 32%, #071039 78%);
+  background: radial-gradient(circle at 50% 0%, #1A3BB0 0%, #0F2270 32%, #071039 74%);
 }
 
 .font-display {
