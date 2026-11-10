@@ -25,7 +25,7 @@ Vercel configuration is included in `vercel.json`: Vite framework, `npm ci`, `np
 - The unused 3D book component, embedded model, and book-only Three.js dependencies have been removed at the user’s request. The visible folder cards and glass icons remain available.
 - Four missing platform logos were recovered from the existing public site at https://clone-website-with-3d-elements.vercel.app/ and saved under `src/assets/platforms/`.
 - The existing Supabase notification integration is unchanged. Its browser publishable key is not an administrative/service-role key. No database changes were made.
-- The archive does not contain a server implementation of `/api/subscribers`. The frontend retains its original fallback subscriber count if that endpoint is unavailable.
+- The `/api/subscribers` Vercel function fetches the live @zarsstudy Telegram member count using the server-side TELEGRAM_BOT_TOKEN, with the public channel preview as a fallback. If unavailable, the page shows a neutral message instead of an outdated count.
 - Existing sites and repositories are not modified by this import.
 
 ## Focused loading and interface update

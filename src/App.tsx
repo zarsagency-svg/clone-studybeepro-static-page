@@ -11,7 +11,7 @@ import {
 } from './components/GlassIcons3D';
 
 export function App() {
-  const [subscriberCount, setSubscriberCount] = useState<number | null>(18);
+  const [subscriberCount, setSubscriberCount] = useState<number | null>(null);
   const [isPwModalOpen, setIsPwModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const openPwModal = useCallback(() => setIsPwModalOpen(true), []);
@@ -28,7 +28,7 @@ export function App() {
           }
         }
       } catch {
-        // Fallback to live known count (18) from mindspark-all.vercel.app/api/subscribers
+        // Keep the neutral community message if the count is unavailable.
       }
     }
     fetchSubscribers();
