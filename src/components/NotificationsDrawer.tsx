@@ -223,6 +223,11 @@ export default function NotificationsDrawer({
                           {msg.text}
                         </p>
 
+                        {msg.imageUrl && (
+                          <img src={msg.imageUrl} alt="Image attached to notification" loading="lazy" decoding="async"
+                            className="notification-image mt-3 w-full h-auto rounded-xl border border-white/20" />
+                        )}
+
                         {/* Action Bar */}
                         <div
                           className="mt-4 pt-3 flex items-center justify-between"

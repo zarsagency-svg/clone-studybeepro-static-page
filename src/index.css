@@ -240,3 +240,7 @@ body {
 .theme-yellow > .ambient-glow:nth-of-type(2) { background: rgba(230,180,0,.28) !important; }
 .theme-yellow > .ambient-glow:nth-of-type(3) { background: rgba(228,114,0,.20) !important; }
 .theme-yellow > .ambient-glow:nth-of-type(4) { background: rgba(229,222,0,.14) !important; }
+
+.theme-red .notification-image { filter: hue-rotate(-140deg); }
+.theme-green .notification-image { filter: hue-rotate(130deg); }
+.theme-yellow .notification-image { filter: hue-rotate(165deg); }

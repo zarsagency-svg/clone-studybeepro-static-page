@@ -6,4 +6,5 @@ export interface NotificationItem {
   likes: number;
   liked: boolean;
   tag?: string;
+  imageUrl?: string;
 }

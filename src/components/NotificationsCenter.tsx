@@ -108,7 +108,7 @@ export const NotificationsCenter = React.memo(function NotificationsCenter() {
     setIsLoading(true);
     setErrorMsg('');
     try {
-      const raw = await callSupabaseRpc('mindspark_get_notifications', {
+      const raw = await callSupabaseRpc('mindspark_get_notifications_v2', {
         p_visitor_id: visitorId || '00000000-0000-4000-8000-000000000001',
       });
       if (currentReq !== reqCounter.current) return;
@@ -118,6 +118,7 @@ export const NotificationsCenter = React.memo(function NotificationsCenter() {
           id: String(r.id),
           title: String(r.title || 'MIND SPARK Announcement'),
           text: String(r.body || ''),
+          imageUrl: typeof r.image_url === 'string' && r.image_url.startsWith(`${SUPABASE_URL}/storage/v1/object/public/`) ? r.image_url : undefined,
           createdAt: new Date(String(r.created_at || Date.now())).getTime(),
           likes: Number(r.likes) || 0,
           liked: Boolean(r.liked),
