@@ -288,7 +288,10 @@ export const NotificationsCenter = React.memo(function NotificationsCenter() {
           onPointerDown={warmDrawer}
           onFocus={warmDrawer}
           aria-label="Admin Notifications"
-          className="group relative flex items-center gap-2.5 p-1.5 sm:pr-4 rounded-2xl transition-ui duration-200 hover:-translate-y-0.5 hover:scale-[1.03] active:scale-95 cursor-pointer"
+          aria-expanded={isOpen}
+          className={`group relative flex items-center gap-2.5 p-1.5 sm:pr-4 rounded-2xl transition-ui duration-200 hover:-translate-y-0.5 hover:scale-[1.03] active:scale-95 cursor-pointer ${
+            unreadCount > 0 && !isOpen ? 'notification-button-attention' : ''
+          }`}
           style={{
             background:
               'linear-gradient(145deg, rgba(175,197,248,0.28) 0%, rgba(46,93,230,0.32) 55%, rgba(15,34,112,0.75) 100%)',
@@ -299,6 +302,10 @@ export const NotificationsCenter = React.memo(function NotificationsCenter() {
               '0 14px 32px -6px rgba(7,16,57,0.8), 0 0 20px rgba(46,93,230,0.35), inset 0 1.5px 2px rgba(230,237,253,0.5)',
           }}
         >
+          {unreadCount > 0 && !isOpen && (
+            <span className="notification-attention-ring" aria-hidden="true" />
+          )}
+
           <GlassEnvelopeNotificationIcon
             className="w-10 h-10 sm:w-11 sm:h-11"
             hasUnread={unreadCount > 0}
