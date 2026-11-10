@@ -111,3 +111,13 @@ A GitHub Actions workflow (`.github/workflows/build.yml`) runs install, typechec
 ## Source
 
 Restored from the `clone-studybeepro-static-page.zip` archive, then rebranded to MIND SPARK with a red & black theme and the supplied spark logo. This README, `.gitignore` and the CI workflow were added for the repository.
+
+## Modified frontend published at mindspark-all.vercel.app
+
+The frontend from `zarsagency-svg/mind-spark-play`, commit `b5f68269962791db969100e1acd87117bffdefa0`, was imported without replacing the existing backend. The source project's documentation is retained in `docs/imported-frontend.md`.
+
+- The existing subscriber API, notification helper, database migration, example environment configuration, public message JSON files, and build workflow are retained unchanged.
+- The existing Vercel project, production domain, repository connection, and environment variables are retained.
+- Frontend changes include the simplified homepage, static non-glowing title, optimized WebP logos, separately cached Vite assets, and on-demand notification drawer.
+- The 3D-book component and model remain in source control but are not displayed.
+- The separate `mind-spark-play.vercel.app` deployment is left unchanged.
