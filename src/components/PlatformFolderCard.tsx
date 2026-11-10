@@ -178,7 +178,8 @@ export const PlatformFolderCard = React.memo(function PlatformFolderCard({
           Replicates ref3_real.png front pocket with:
           - Desktop glass blur; gradient-only glass on touchscreens.
           - 3D Pillowy Inner Cushion Bevel
-          - Centered platform name and an open indicator for active folders
+          - Top-left Title + Subtitle, Top-right (⋮) circle icon,
+            Bottom-left status metadata
       ============================================================ */}
       <div
         className="
@@ -221,29 +222,64 @@ export const PlatformFolderCard = React.memo(function PlatformFolderCard({
           }}
         />
 
-        {/* Keep the platform name clear and readable on every screen size. */}
-        <div className="relative z-10 flex flex-1 items-start justify-start px-2 sm:px-3 pt-2 sm:pt-2.5">
-          <h2 className="font-display font-bold text-left text-[13px] sm:text-[15px] leading-tight tracking-tight text-[#E6EDFD] group-hover:text-white transition-colors break-words [overflow-wrap:anywhere]">
-            {item.name}
-          </h2>
+        {/* Top Row: Platform Title & Subtitle (left) + Circular (⋮) Badge (right) */}
+        <div className="relative z-10 flex items-start justify-between gap-2 px-1.5 pt-0.5">
+          <div className="text-left min-w-0">
+            <h2
+              className="font-display font-bold text-[15px] sm:text-[17px] leading-tight tracking-tight text-[#E6EDFD] truncate group-hover:text-white transition-colors"
+            >
+              {item.name}
+            </h2>
+            <p className="text-[11px] sm:text-[12px] font-medium text-[#E6EDFD]/80 truncate mt-0.5">
+              {item.subtitle}
+            </p>
+          </div>
+
+          {/* Circular (⋮) icon matching top-right of ref3_real.png */}
+          <div
+            className="shrink-0 w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center transition-ui duration-200 group-hover:scale-110 group-hover:bg-[#E6EDFD]/25"
+            style={{
+              border: '1.25px solid rgba(230,237,253,0.75)',
+              background: 'rgba(230,237,253,0.12)',
+              boxShadow: '0 2px 8px rgba(7,16,57,0.25)',
+            }}
+          >
+            <svg
+              viewBox="0 0 16 16"
+              className="w-3.5 h-3.5 text-[#E6EDFD]"
+              fill="currentColor"
+            >
+              <circle cx="8" cy="3.5" r="1.2" />
+              <circle cx="8" cy="8" r="1.2" />
+              <circle cx="8" cy="12.5" r="1.2" />
+            </svg>
+          </div>
         </div>
 
-        {isInteractive && (
-          <div className="relative z-10 flex justify-end px-1.5 pb-0.5">
-            <span
-              className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-[#E6EDFD] opacity-90 group-hover:opacity-100 transition-opacity"
-              style={{
-                background: 'rgba(7,16,57,0.38)',
-                border: '1px solid rgba(230,237,253,0.3)',
-              }}
+        {/* Bottom Row: Last Added / Platform Meta Text (matches bottom-left of ref3_real.png) */}
+        <div className="relative z-10 flex items-center justify-between px-1.5 pb-0.5">
+          <span className="text-[10px] sm:text-[11px] font-medium tracking-wide text-[#E6EDFD]/90 truncate">
+            {item.metaText}
+          </span>
+          <span
+            className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-[#E6EDFD] opacity-90 group-hover:opacity-100 transition-opacity"
+            style={{
+              background: 'rgba(7,16,57,0.38)',
+              border: '1px solid rgba(230,237,253,0.3)',
+            }}
+          >
+            <span>Open</span>
+            <svg
+              viewBox="0 0 12 12"
+              className="w-2.5 h-2.5 transition-transform duration-200 group-hover:translate-x-0.5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
             >
-              <span>Open</span>
-              <svg viewBox="0 0 12 12" className="w-2.5 h-2.5 transition-transform duration-200 group-hover:translate-x-0.5" fill="none" stroke="currentColor" strokeWidth="1.8">
-                <path d="M2.5 6H9.5M6.5 3L9.5 6L6.5 9" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </span>
-          </div>
-        )}
+              <path d="M2.5 6H9.5M6.5 3L9.5 6L6.5 9" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </span>
+        </div>
       </div>
     </div>
   );
