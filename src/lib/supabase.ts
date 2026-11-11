@@ -158,8 +158,20 @@ export async function signInWithGoogle(): Promise<void> {
 /**
  * Exchange the code Supabase Auth redirected back with. Safe to call on every
  * page load — it resolves to null when there is nothing to consume.
+ *
+ * Memoised: the auth code is single-use, and this runs both from main.tsx (so a
+ * redirect is consumed even while the drawer is closed) and from the chat panel
+ * itself. React StrictMode double-invokes effects, so sharing one promise keeps
+ * the code from being spent twice.
  */
-export async function consumeAuthRedirect(): Promise<GoogleSession | null> {
+let redirectPromise: Promise<GoogleSession | null> | null = null;
+
+export function consumeAuthRedirect(): Promise<GoogleSession | null> {
+  redirectPromise ??= handleAuthRedirect();
+  return redirectPromise;
+}
+
+async function handleAuthRedirect(): Promise<GoogleSession | null> {
   if (typeof window === 'undefined') return null;
 
   const url = new URL(window.location.href);
