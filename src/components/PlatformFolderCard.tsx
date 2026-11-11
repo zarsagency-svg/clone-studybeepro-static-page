@@ -135,8 +135,8 @@ export const PlatformFolderCard = React.memo(function PlatformFolderCard({
         {/* TILTED PLATFORM LOGO CARD INSIDE THE FOLDER */}
         <div
           className="
-            absolute -top-[10%] right-[10%] sm:right-[11%]
-            w-[44%] aspect-square rounded-[20px] p-1.5
+            absolute -top-[4%] right-[12%]
+            w-[42%] aspect-square rounded-[20px] p-1.5
             transition-ui duration-200 ease-out
             group-hover:-translate-y-3.5 group-hover:scale-105
           "
