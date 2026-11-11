@@ -8,8 +8,13 @@
  * the client, and nothing sensitive is readable by an anonymous caller.
  */
 
-export const SUPABASE_URL = 'https://duoynnsuogaekjtdzcrd.supabase.co';
-export const SUPABASE_KEY = 'sb_publishable_tt29PlGr1WMeZOY8Pa3IfQ_wmhd6432';
+// Set on the Vercel project as VITE_SUPABASE_URL / VITE_SUPABASE_PUBLISHABLE_KEY;
+// the literals are the same values, kept as a fallback for local builds.
+export const SUPABASE_URL =
+  import.meta.env.VITE_SUPABASE_URL || 'https://duoynnsuogaekjtdzcrd.supabase.co';
+export const SUPABASE_KEY =
+  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
+  'sb_publishable_tt29PlGr1WMeZOY8Pa3IfQ_wmhd6432';
 
 const SESSION_KEY = 'mindspark_google_session';
 const VERIFIER_KEY = 'mindspark_google_pkce_verifier';
