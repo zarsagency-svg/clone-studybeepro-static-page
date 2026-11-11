@@ -1,6 +1,19 @@
-import { Heart, X, CheckCircle2 } from 'lucide-react';
+import { lazy, Suspense, useState } from 'react';
+import { Heart, X, CheckCircle2, MessageCircle } from 'lucide-react';
 import { GlassChatBubbleIcon } from './GlassIcons3D';
 import type { NotificationItem } from '../types/notifications';
+
+let chatModule: Promise<typeof import('./ChatWithAdmin')> | null = null;
+function loadChat() {
+  chatModule ??= import('./ChatWithAdmin').catch((error) => {
+    chatModule = null;
+    throw error;
+  });
+  return chatModule;
+}
+const ChatWithAdmin = lazy(loadChat);
+
+type DrawerTab = 'updates' | 'chat';
 
 interface NotificationsDrawerProps {
   isVisible: boolean;
@@ -38,6 +51,8 @@ export default function NotificationsDrawer({
   onToggleLike,
 }: NotificationsDrawerProps) {
   const visible = isVisible;
+  const [activeTab, setActiveTab] = useState<DrawerTab>('updates');
+  const [chatUnread, setChatUnread] = useState(0);
 
   return (
         <div
@@ -94,7 +109,7 @@ export default function NotificationsDrawer({
                 <div>
                   <div className="flex items-center gap-2">
                     <h2 id="updates-title" className="text-[#E6EDFD] font-display font-bold text-lg tracking-tight">
-                      Updates
+                      {activeTab === 'chat' ? 'Chat with Admin' : 'Updates'}
                     </h2>
                     <span
                       className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider text-[#E6EDFD]"
@@ -121,7 +136,56 @@ export default function NotificationsDrawer({
               </div>
             </div>
 
+            {/* Tab bar: announcements feed vs. direct chat with the admin */}
+            <div
+              className="relative z-10 px-4 sm:px-5 pt-3.5 pb-3 flex items-center gap-2"
+              style={{ borderBottom: '1px solid rgba(175,197,248,0.22)' }}
+            >
+              {(
+                [
+                  { id: 'updates' as const, label: 'Updates', badge: 0 },
+                  { id: 'chat' as const, label: 'Chat with Admin', badge: chatUnread },
+                ]
+              ).map((tab) => {
+                const active = activeTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => setActiveTab(tab.id)}
+                    aria-pressed={active}
+                    className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-full text-xs font-semibold transition-ui duration-200 cursor-pointer ${
+                      active ? 'text-[#E6EDFD]' : 'text-[#AFC5F8] hover:text-[#E6EDFD]'
+                    }`}
+                    style={{
+                      background: active
+                        ? 'linear-gradient(135deg, #2E5DE6 0%, #6E92F2 100%)'
+                        : 'rgba(15,34,112,0.5)',
+                      border: active
+                        ? '1px solid rgba(230,237,253,0.6)'
+                        : '1px solid rgba(175,197,248,0.28)',
+                      boxShadow: active ? '0 4px 14px rgba(46,93,230,0.5)' : 'none',
+                    }}
+                  >
+                    {tab.id === 'chat' && <MessageCircle className="w-3.5 h-3.5" />}
+                    <span>{tab.label}</span>
+                    {tab.badge > 0 && (
+                      <span
+                        className="min-w-[18px] h-[18px] px-1 rounded-full grid place-items-center text-[10px] font-bold text-[#071039]"
+                        style={{ background: '#AFC5F8', border: '1px solid rgba(230,237,253,0.7)' }}
+                      >
+                        {tab.badge}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+
             {/* Messages Container */}
+            <div
+              className={activeTab === 'updates' ? 'relative z-10 flex-1 flex flex-col min-h-0' : 'hidden'}
+            >
             <div
               id="messages-container"
               className="relative z-10 flex-1 overflow-y-auto p-4 sm:p-5 space-y-5 no-scrollbar"
@@ -274,6 +338,30 @@ export default function NotificationsDrawer({
                   );
                 })
               )}
+            </div>
+            </div>
+
+            {/* WhatsApp-style chat with the admin (Google sign-in required) */}
+            <div
+              className={
+                activeTab === 'chat'
+                  ? 'relative z-10 flex-1 flex flex-col min-h-0'
+                  : 'hidden'
+              }
+            >
+              <Suspense
+                fallback={
+                  <div className="p-6 space-y-3">
+                    <div className="h-14 w-2/3 rounded-2xl bg-[#1A3BB0]/30 border border-[#6E92F2]/25 animate-pulse" />
+                    <div className="h-12 w-1/2 ml-auto rounded-2xl bg-[#1A3BB0]/20 border border-[#6E92F2]/20 animate-pulse" />
+                  </div>
+                }
+              >
+                <ChatWithAdmin
+                  isActive={activeTab === 'chat'}
+                  onUnreadChange={setChatUnread}
+                />
+              </Suspense>
             </div>
           </div>
         </div>

@@ -2,6 +2,7 @@ import React, { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import type { NotificationItem } from '../types/notifications';
 import { X } from 'lucide-react';
 import { GlassEnvelopeNotificationIcon } from './GlassIcons3D';
+import { SUPABASE_KEY, SUPABASE_URL } from '../lib/supabase';
 
 let drawerModule: Promise<typeof import('./NotificationsDrawer')> | null = null;
 function loadDrawer() {
@@ -17,8 +18,6 @@ function warmDrawer() {
 }
 const NotificationsDrawer = lazy(loadDrawer);
 
-const SUPABASE_URL = 'https://duoynnsuogaekjtdzcrd.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_tt29PlGr1WMeZOY8Pa3IfQ_wmhd6432';
 const VISITOR_STORAGE_KEY = 'mindspark_notification_visitor';
 const LAST_SEEN_STORAGE_KEY = 'mindspark_notifications_last_seen';
 
