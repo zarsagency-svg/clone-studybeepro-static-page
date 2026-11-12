@@ -194,9 +194,10 @@ export const PLATFORMS: PlatformItem[] = [
   {
     id: 14,
     name: 'Physics Wallah',
-    subtitle: 'JEE & NEET Batches',
-    metaText: 'Live Classes · Study Material',
+    subtitle: '2 High-Speed Servers',
+    metaText: 'Click to Select Server · PW Mod',
     category: 'jee-neet',
+    isModal: true,
     title: 'Physics Wallah on MIND SPARK Platform',
     imgSrc: physicsWallahImg,
     imgAlt: 'Physics Wallah - MIND SPARK Mod',
