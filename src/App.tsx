@@ -1,15 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { CSSProperties } from 'react';
-import { ArrowRight, ExternalLink, Menu, Sparkles, X } from 'lucide-react';
+import { ArrowRight, Menu, Sparkles, X } from 'lucide-react';
 import { PLATFORMS } from './data/platforms';
 import { PlatformFolderCard } from './components/PlatformFolderCard';
 import { PlatformNeonCard } from './components/PlatformNeonCard';
 import { NotificationsCenter } from './components/NotificationsCenter';
 import {
   GlassChatBubbleIcon,
-  GlassPlayIcon,
   GlassSearchIcon,
-  GlassStreamIcon,
 } from './components/GlassIcons3D';
 
 const CUSTOM_COLOURS = [
@@ -79,9 +77,7 @@ export function App() {
     document.addEventListener('keydown', onKeyDown);
     return () => { document.removeEventListener('pointerdown', onPointerDown); document.removeEventListener('keydown', onKeyDown); };
   }, [isCustomizeOpen]);
-  const [isPwModalOpen, setIsPwModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const openPwModal = useCallback(() => setIsPwModalOpen(true), []);
 
   useEffect(() => {
     let mounted = true;
@@ -413,9 +409,9 @@ export function App() {
         >
           {filteredPlatforms.map((item, index) => (
             cardStyle === 'folder' ? (
-              <PlatformFolderCard key={item.id} item={item} priority={index < 2} onOpenModal={item.isModal ? openPwModal : undefined} />
+              <PlatformFolderCard key={item.id} item={item} priority={index < 2} />
             ) : (
-              <PlatformNeonCard key={item.id} item={item} priority={index < 2} onOpenModal={item.isModal ? openPwModal : undefined} />
+              <PlatformNeonCard key={item.id} item={item} priority={index < 2} />
             )
           ))}
         </nav>
@@ -448,116 +444,7 @@ export function App() {
       {/* ============================================================
           PHYSICS WALLAH SERVER SELECTION GLASSMORPHIC MODAL
       ============================================================ */}
-      {isPwModalOpen && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="physics-servers-title"
-          onClick={(e) => {
-            if (e.target === e.currentTarget) setIsPwModalOpen(false);
-          }}
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
-          style={{
-            background: 'rgba(7, 16, 57, 0.76)',
-            backdropFilter: 'var(--glass-overlay-filter)',
-            WebkitBackdropFilter: 'var(--glass-overlay-filter)',
-          }}
-        >
-          <div
-            className="relative w-full max-w-md rounded-[28px] p-6 text-[#E6EDFD] overflow-hidden animate-pop-in"
-            style={{
-              background:
-                'linear-gradient(160deg, rgba(46,93,230,0.32) 0%, rgba(15,34,112,0.88) 52%, rgba(7,16,57,0.96) 100%)',
-              backdropFilter: 'var(--glass-filter)',
-              WebkitBackdropFilter: 'var(--glass-filter)',
-              border: '1.5px solid rgba(230,237,253,0.45)',
-              boxShadow:
-                '0 25px 60px -12px rgba(7,16,57,0.95), 0 0 40px rgba(46,93,230,0.35), inset 0 1.5px 2px rgba(230,237,253,0.45)',
-            }}
-          >
-            <div className="mb-5 flex items-start justify-between gap-4">
-              <div className="flex items-center gap-3.5">
-                <GlassStreamIcon className="w-12 h-12 shrink-0" />
-                <div>
-                  <h2
-                    id="physics-servers-title"
-                    className="font-display text-xl font-bold text-[#E6EDFD]"
-                  >
-                    Physics Wallah
-                  </h2>
-                  <p className="mt-0.5 text-xs sm:text-sm text-[#AFC5F8]">
-                    Choose a high-speed lecture server to continue
-                  </p>
-                </div>
-              </div>
-
-              <button
-                type="button"
-                aria-label="Close server selection"
-                onClick={() => setIsPwModalOpen(false)}
-                className="rounded-full p-2 text-[#AFC5F8] transition-colors hover:bg-[#E6EDFD]/15 hover:text-[#E6EDFD] cursor-pointer"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-
-            <div className="flex flex-col gap-3.5">
-              {[
-                {
-                  name: 'Server 1',
-                  sub: 'Rex Lecture Player · Primary Stream',
-                  href: 'https://rex-lecture-player.vercel.app/',
-                  badge: 'Fastest',
-                },
-                {
-                  name: 'Server 2',
-                  sub: 'AryaVidya Mirror · Backup Stream',
-                  href: 'https://stream.aryavidya.cc/index.php#/',
-                  badge: 'Mirror',
-                },
-              ].map((srv, idx) => (
-                <a
-                  key={idx}
-                  href={srv.href}
-                  className="group relative flex items-center justify-between rounded-2xl p-4 transition-ui duration-200 hover:-translate-y-0.5"
-                  style={{
-                    background:
-                      'linear-gradient(145deg, rgba(175,197,248,0.22) 0%, rgba(26,59,176,0.42) 100%)',
-                    backdropFilter: 'var(--glass-filter)',
-                    border: '1px solid rgba(230,237,253,0.38)',
-                    boxShadow:
-                      '0 10px 24px -6px rgba(7,16,57,0.65), inset 0 1px 1px rgba(230,237,253,0.35)',
-                  }}
-                >
-                  <div className="flex items-center gap-3">
-                    <GlassPlayIcon className="w-9 h-9 shrink-0" />
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-display font-bold text-[15px] text-[#E6EDFD] group-hover:text-white">
-                          {srv.name}
-                        </span>
-                        <span
-                          className="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider text-[#E6EDFD]"
-                          style={{
-                            background: 'rgba(46,93,230,0.55)',
-                            border: '1px solid rgba(230,237,253,0.35)',
-                          }}
-                        >
-                          {srv.badge}
-                        </span>
-                      </div>
-                      <p className="text-xs text-[#AFC5F8] mt-0.5">{srv.sub}</p>
-                    </div>
-                  </div>
-                  <ExternalLink className="h-4 w-4 text-[#AFC5F8] group-hover:text-[#E6EDFD] group-hover:translate-x-0.5 transition-ui" />
-                </a>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ============================================================
+{/* ============================================================
           FOOTER
       ============================================================ */}
       <footer
