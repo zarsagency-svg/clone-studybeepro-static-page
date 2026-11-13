@@ -563,8 +563,8 @@ export function App() {
       <footer
         className="w-full py-5 text-center mt-4 relative z-10 flex-shrink-0 flex flex-col items-center gap-3 animate-pop-in"
       >
-        <p className="text-[#AFC5F8]/70 text-[11px] font-semibold tracking-[0.22em] uppercase">
-          © 2026 MIND SPARK
+        <p className="text-[#AFC5F8]/70 text-[11px] font-semibold tracking-[0.22em]">
+          Sadik
         </p>
 
         <div className="seo-hidden-text">
